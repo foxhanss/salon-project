@@ -48,6 +48,7 @@ public class LaporanArsip extends javax.swing.JPanel {
         jLabel3.setText("Laporan Arsip");
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Kategori Dokumen");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -68,7 +69,9 @@ public class LaporanArsip extends javax.swing.JPanel {
         );
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Aktivitas Arsip");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);

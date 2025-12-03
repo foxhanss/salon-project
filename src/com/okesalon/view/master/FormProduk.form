@@ -11,7 +11,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,5,75,0,0,5,-56"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,5,46,0,0,5,-5"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
@@ -49,7 +49,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="1247" max="32767" attributes="0"/>
+                      <EmptySpace pref="1298" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -90,27 +90,46 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="btnCari" min="-2" pref="72" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtCari" min="-2" pref="638" max="-2" attributes="0"/>
+                              <EmptySpace pref="31" max="32767" attributes="0"/>
+                              <Component id="btnViewRiwayatTransaksi" min="-2" pref="196" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btnViewDetailProduk" min="-2" pref="196" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="338" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jScrollPane12" alignment="1" max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="jButton38" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="jButton41" min="-2" pref="107" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
-                              <Component id="jButton37" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-                              <Component id="jButton38" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                              <Component id="jButton41" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel79" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jTextField68" min="-2" pref="253" max="-2" attributes="0"/>
+                                      <Component id="stok_saat_ini" min="-2" pref="253" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jTextField66" min="-2" pref="253" max="-2" attributes="0"/>
+                                      <Component id="harga_beli" min="-2" pref="253" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -120,30 +139,35 @@
                                           <Component id="jLabel76" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="telp_supplier" min="-2" pref="253" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Component id="jTextField64" max="32767" attributes="0"/>
-                                                  <Component id="jTextField62" max="32767" attributes="0"/>
-                                                  <Component id="jTextField63" pref="253" max="32767" attributes="0"/>
-                                                  <Component id="jTextField61" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="kategori" min="-2" pref="200" max="-2" attributes="0"/>
+                                                  <Component id="nama_produk" min="-2" pref="253" max="-2" attributes="0"/>
+                                                  <Component id="nama_supplier" max="32767" attributes="0"/>
                                               </Group>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <EmptySpace pref="30" max="32767" attributes="0"/>
-                                              <Component id="jTextField65" min="-2" pref="253" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel78" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="jTextField67" min="-2" pref="253" max="-2" attributes="0"/>
+                                      <Component id="harga_jual" min="-2" pref="253" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnTambah" min="-2" pref="122" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                              <Component id="btnClear" min="-2" pref="122" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel84" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
@@ -156,117 +180,128 @@
                                   <Component id="jLabel74" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jTextField70" max="32767" attributes="0"/>
-                                  <Component id="jTextField69" max="32767" attributes="0"/>
-                                  <Component id="jTextField71" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jComboBox11" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                                  <Component id="jComboBox12" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton36" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane11" alignment="0" pref="253" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="upload" min="-2" pref="124" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="tanggal_expired" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="stok_minimum" alignment="0" min="-2" pref="253" max="-2" attributes="0"/>
+                                      <Component id="status" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jenis" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jScrollPane11" min="-2" pref="365" max="-2" attributes="0"/>
+                                  <Component id="satuan" alignment="0" min="-2" pref="122" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="141" max="-2" attributes="0"/>
-                              <Component id="jButton40" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField72" min="-2" pref="638" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton42" min="-2" pref="113" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton39" min="-2" pref="115" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane12" min="-2" pref="1125" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace pref="345" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="146" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTextField63" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTextField69" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel72" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="nama_produk" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel73" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="kategori" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="nama_supplier" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="jLabel75" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="telp_supplier" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="jLabel76" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="harga_beli" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="jLabel77" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="harga_jual" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="jLabel78" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="stok_saat_ini" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="jLabel79" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="886" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="btnClear" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                              <Component id="btnTambah" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="109" pref="109" max="-2" attributes="0"/>
+                                  <Component id="jLabel82" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jLabel72" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField61" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel81" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="satuan" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel80" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                          <Component id="stok_minimum" min="-2" pref="34" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="tanggal_expired" min="-2" pref="34" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="upload" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                                      <Component id="jLabel85" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel74" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jenis" min="-2" pref="40" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel83" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="status" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel84" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane11" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel73" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField62" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel80" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField71" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel75" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField64" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel82" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField70" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCari" alignment="3" min="-2" pref="42" max="-2" attributes="0"/>
+                          <Component id="txtCari" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="btnViewDetailProduk" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
+                          <Component id="btnViewRiwayatTransaksi" alignment="3" min="-2" pref="48" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="29" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                      <Component id="jScrollPane12" min="-2" pref="250" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField65" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel76" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
-                          <Component id="jLabel85" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton36" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButton38" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="jButton41" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField66" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel77" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel74" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox11" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField67" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel78" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel83" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox12" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jTextField68" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel79" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel84" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jScrollPane11" min="-2" pref="74" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton37" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton38" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton41" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton40" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField72" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton42" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButton39" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-                      <Component id="jScrollPane12" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="253" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="411" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -275,7 +310,7 @@
             <Component class="javax.swing.JLabel" name="jLabel72">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Nama Produk"/>
               </Properties>
@@ -283,15 +318,15 @@
             <Component class="javax.swing.JLabel" name="jLabel73">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="kategori Produk"/>
+                <Property name="text" type="java.lang.String" value="Kategori Produk"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel74">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Jenis"/>
               </Properties>
@@ -299,7 +334,7 @@
             <Component class="javax.swing.JLabel" name="jLabel75">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Nama Supplier"/>
               </Properties>
@@ -307,7 +342,7 @@
             <Component class="javax.swing.JLabel" name="jLabel76">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Telepon Supplier"/>
               </Properties>
@@ -315,7 +350,7 @@
             <Component class="javax.swing.JLabel" name="jLabel77">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Harga beli"/>
               </Properties>
@@ -323,7 +358,7 @@
             <Component class="javax.swing.JLabel" name="jLabel78">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Harga Jual"/>
               </Properties>
@@ -331,7 +366,7 @@
             <Component class="javax.swing.JLabel" name="jLabel79">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Stok Saat Ini"/>
               </Properties>
@@ -339,7 +374,7 @@
             <Component class="javax.swing.JLabel" name="jLabel80">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Stok Minimum"/>
               </Properties>
@@ -347,7 +382,7 @@
             <Component class="javax.swing.JLabel" name="jLabel81">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Satuan"/>
               </Properties>
@@ -355,7 +390,7 @@
             <Component class="javax.swing.JLabel" name="jLabel82">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Tanggal Expired"/>
               </Properties>
@@ -363,7 +398,7 @@
             <Component class="javax.swing.JLabel" name="jLabel83">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Status"/>
               </Properties>
@@ -371,7 +406,7 @@
             <Component class="javax.swing.JLabel" name="jLabel84">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Deskripsi"/>
               </Properties>
@@ -379,56 +414,78 @@
             <Component class="javax.swing.JLabel" name="jLabel85">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Times New Roman" size="18" style="0"/>
+                  <Font name="Times New Roman" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Foto Produk"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField61">
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextField62">
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextField63">
+            <Component class="javax.swing.JTextField" name="nama_produk">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField3"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField64">
+            <Component class="javax.swing.JTextField" name="nama_supplier">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField5ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField65">
+            <Component class="javax.swing.JTextField" name="telp_supplier">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField6ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField66">
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextField67">
+            <Component class="javax.swing.JTextField" name="harga_beli">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="harga_jual">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField8ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField68">
+            <Component class="javax.swing.JTextField" name="stok_saat_ini">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+              </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField69">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField10ActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextField70">
-            </Component>
-            <Component class="javax.swing.JTextField" name="jTextField71">
+            <Component class="javax.swing.JTextField" name="stok_minimum">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField13ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox11">
+            <Component class="javax.swing.JComboBox" name="jenis">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="3">
                     <StringItem index="0" value="Dijual"/>
@@ -436,18 +493,31 @@
                     <StringItem index="2" value="Dijuall dan Layanan"/>
                   </StringArray>
                 </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox12">
+            <Component class="javax.swing.JComboBox" name="status">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
                     <StringItem index="0" value="Aktif"/>
                     <StringItem index="1" value="Non-Aktif"/>
                   </StringArray>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
                 </Property>
               </Properties>
               <AuxValues>
@@ -461,7 +531,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="jTextArea6">
+                <Component class="javax.swing.JTextArea" name="deskripsi">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
@@ -469,48 +539,100 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="jButton36">
+            <Component class="javax.swing.JButton" name="upload">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Upload Foto"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="uploadActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton37">
+            <Component class="javax.swing.JButton" name="btnTambah">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Tambah Produk"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="TAMBAH"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTambahActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton38">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Edit"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="EDIT"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton39">
+            <Component class="javax.swing.JButton" name="btnViewDetailProduk">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="View Detail Produk"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewDetailProdukActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton40">
+            <Component class="javax.swing.JButton" name="btnCari">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Cari"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCariActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton41">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Hapus"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="HAPUS"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton42">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="View Riwayat Transaksi Produk"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton8ActionPerformed"/>
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane12">
@@ -520,8 +642,11 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable6">
+                <Component class="javax.swing.JTable" name="tabel_produk">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Times New Roman" size="18" style="0"/>
+                    </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="4" rowCount="4">
                         <Column editable="true" title="Title 1" type="java.lang.Object"/>
@@ -531,10 +656,106 @@
                       </Table>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabel_produkMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JTextField" name="jTextField72">
+            <Component class="javax.swing.JTextField" name="txtCari">
+            </Component>
+            <Component class="javax.swing.JButton" name="btnClear">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="CLEAR"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="com.toedter.calendar.JDateChooser" name="tanggal_expired">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="satuan">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="8">
+                    <StringItem index="0" value="Botol"/>
+                    <StringItem index="1" value="Tube"/>
+                    <StringItem index="2" value="Sachet"/>
+                    <StringItem index="3" value="Box"/>
+                    <StringItem index="4" value="Pcs"/>
+                    <StringItem index="5" value="Pack"/>
+                    <StringItem index="6" value="Liter"/>
+                    <StringItem index="7" value="Ml"/>
+                  </StringArray>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="satuanActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="kategori">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="5">
+                    <StringItem index="0" value="Hair Care"/>
+                    <StringItem index="1" value="Hair Coloring"/>
+                    <StringItem index="2" value="Nail Care"/>
+                    <StringItem index="3" value="Skin Care"/>
+                    <StringItem index="4" value="Make Up"/>
+                  </StringArray>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnViewRiwayatTransaksi">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Times New Roman" size="18" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="View Riwayat Transaksi"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                    <BevelBorder/>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewRiwayatTransaksiActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

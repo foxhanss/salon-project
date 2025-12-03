@@ -4,18 +4,42 @@
  * and open the template in the editor.
  */
 package com.okesalon.view.master;
-
+import com.okesalon.dao.ProdukDAO;
+import com.okesalon.model.Produk;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 /**
  *
  * @author T480
  */
 public class FormProduk extends javax.swing.JPanel {
 
+    // Variabel instance
+    private DefaultTableModel tableModel;
+    private ProdukDAO produkDAO;
+    private Produk selectedProduk = null;
+    private String selectedFotoPath = null;
+    private boolean isViewRiwayatMode = false;
+   
     /**
      * Creates new form FormProduk
      */
     public FormProduk() {
         initComponents();
+        produkDAO = new ProdukDAO();
+        initTable();
+        setupComboBoxes();
+        loadDataToTable();
     }
 
     /**
@@ -45,31 +69,31 @@ public class FormProduk extends javax.swing.JPanel {
         jLabel83 = new javax.swing.JLabel();
         jLabel84 = new javax.swing.JLabel();
         jLabel85 = new javax.swing.JLabel();
-        jTextField61 = new javax.swing.JTextField();
-        jTextField62 = new javax.swing.JTextField();
-        jTextField63 = new javax.swing.JTextField();
-        jTextField64 = new javax.swing.JTextField();
-        jTextField65 = new javax.swing.JTextField();
-        jTextField66 = new javax.swing.JTextField();
-        jTextField67 = new javax.swing.JTextField();
-        jTextField68 = new javax.swing.JTextField();
-        jTextField69 = new javax.swing.JTextField();
-        jTextField70 = new javax.swing.JTextField();
-        jTextField71 = new javax.swing.JTextField();
-        jComboBox11 = new javax.swing.JComboBox<>();
-        jComboBox12 = new javax.swing.JComboBox<>();
+        nama_produk = new javax.swing.JTextField();
+        nama_supplier = new javax.swing.JTextField();
+        telp_supplier = new javax.swing.JTextField();
+        harga_beli = new javax.swing.JTextField();
+        harga_jual = new javax.swing.JTextField();
+        stok_saat_ini = new javax.swing.JTextField();
+        stok_minimum = new javax.swing.JTextField();
+        jenis = new javax.swing.JComboBox<>();
+        status = new javax.swing.JComboBox<>();
         jScrollPane11 = new javax.swing.JScrollPane();
-        jTextArea6 = new javax.swing.JTextArea();
-        jButton36 = new javax.swing.JButton();
-        jButton37 = new javax.swing.JButton();
+        deskripsi = new javax.swing.JTextArea();
+        upload = new javax.swing.JButton();
+        btnTambah = new javax.swing.JButton();
         jButton38 = new javax.swing.JButton();
-        jButton39 = new javax.swing.JButton();
-        jButton40 = new javax.swing.JButton();
+        btnViewDetailProduk = new javax.swing.JButton();
+        btnCari = new javax.swing.JButton();
         jButton41 = new javax.swing.JButton();
-        jButton42 = new javax.swing.JButton();
         jScrollPane12 = new javax.swing.JScrollPane();
-        jTable6 = new javax.swing.JTable();
-        jTextField72 = new javax.swing.JTextField();
+        tabel_produk = new javax.swing.JTable();
+        txtCari = new javax.swing.JTextField();
+        btnClear = new javax.swing.JButton();
+        tanggal_expired = new com.toedter.calendar.JDateChooser();
+        satuan = new javax.swing.JComboBox<>();
+        kategori = new javax.swing.JComboBox<>();
+        btnViewRiwayatTransaksi = new javax.swing.JButton();
 
         setLayout(new java.awt.CardLayout());
 
@@ -89,7 +113,7 @@ public class FormProduk extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jLabel3)
-                .addContainerGap(1247, Short.MAX_VALUE))
+                .addContainerGap(1298, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,119 +127,151 @@ public class FormProduk extends javax.swing.JPanel {
 
         jPanel5.setBackground(new java.awt.Color(255, 153, 255));
 
-        jLabel72.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel72.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel72.setText("Nama Produk");
 
-        jLabel73.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jLabel73.setText("kategori Produk");
+        jLabel73.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel73.setText("Kategori Produk");
 
-        jLabel74.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel74.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel74.setText("Jenis");
 
-        jLabel75.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel75.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel75.setText("Nama Supplier");
 
-        jLabel76.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel76.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel76.setText("Telepon Supplier");
 
-        jLabel77.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel77.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel77.setText("Harga beli");
 
-        jLabel78.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel78.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel78.setText("Harga Jual");
 
-        jLabel79.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel79.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel79.setText("Stok Saat Ini");
 
-        jLabel80.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel80.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel80.setText("Stok Minimum");
 
-        jLabel81.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel81.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel81.setText("Satuan");
 
-        jLabel82.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel82.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel82.setText("Tanggal Expired");
 
-        jLabel83.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel83.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel83.setText("Status");
 
-        jLabel84.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel84.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel84.setText("Deskripsi");
 
-        jLabel85.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel85.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel85.setText("Foto Produk");
 
-        jTextField63.setText("jTextField3");
+        nama_produk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
-        jTextField64.addActionListener(new java.awt.event.ActionListener() {
+        nama_supplier.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        nama_supplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField5ActionPerformed(evt);
             }
         });
 
-        jTextField65.addActionListener(new java.awt.event.ActionListener() {
+        telp_supplier.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        telp_supplier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField6ActionPerformed(evt);
             }
         });
 
-        jTextField67.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        jTextField67.addActionListener(new java.awt.event.ActionListener() {
+        harga_beli.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        harga_jual.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        harga_jual.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        harga_jual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField8ActionPerformed(evt);
             }
         });
 
-        jTextField69.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
-            }
-        });
+        stok_saat_ini.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
-        jTextField71.addActionListener(new java.awt.event.ActionListener() {
+        stok_minimum.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stok_minimum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField13ActionPerformed(evt);
             }
         });
 
-        jComboBox11.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dijual", "Layanan", "Dijuall dan Layanan" }));
+        jenis.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jenis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dijual", "Layanan", "Dijuall dan Layanan" }));
+        jenis.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jComboBox12.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aktif", "Non-Aktif" }));
+        status.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aktif", "Non-Aktif" }));
+        status.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTextArea6.setColumns(20);
-        jTextArea6.setRows(5);
-        jScrollPane11.setViewportView(jTextArea6);
+        deskripsi.setColumns(20);
+        deskripsi.setRows(5);
+        jScrollPane11.setViewportView(deskripsi);
 
-        jButton36.setText("Upload Foto");
+        upload.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        upload.setText("Upload Foto");
+        upload.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadActionPerformed(evt);
+            }
+        });
 
-        jButton37.setText("Tambah Produk");
+        btnTambah.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        btnTambah.setText("TAMBAH");
+        btnTambah.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
-        jButton38.setText("Edit");
+        jButton38.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jButton38.setText("EDIT");
+        jButton38.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton38.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton39.setText("View Detail Produk");
+        btnViewDetailProduk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        btnViewDetailProduk.setText("View Detail Produk");
+        btnViewDetailProduk.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnViewDetailProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewDetailProdukActionPerformed(evt);
+            }
+        });
 
-        jButton40.setText("Cari");
+        btnCari.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        btnCari.setText("Cari");
+        btnCari.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
-        jButton41.setText("Hapus");
+        jButton41.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jButton41.setText("HAPUS");
+        jButton41.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton41.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton42.setText("View Riwayat Transaksi Produk");
-        jButton42.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
-        jTable6.setModel(new javax.swing.table.DefaultTableModel(
+        tabel_produk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        tabel_produk.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -226,32 +282,84 @@ public class FormProduk extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane12.setViewportView(jTable6);
+        tabel_produk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabel_produkMouseClicked(evt);
+            }
+        });
+        jScrollPane12.setViewportView(tabel_produk);
+
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        btnClear.setText("CLEAR");
+        btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        tanggal_expired.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        satuan.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        satuan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Botol", "Tube", "Sachet", "Box", "Pcs", "Pack", "Liter", "Ml" }));
+        satuan.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        satuan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                satuanActionPerformed(evt);
+            }
+        });
+
+        kategori.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        kategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hair Care", "Hair Coloring", "Nail Care", "Skin Care", "Make Up" }));
+        kategori.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btnViewRiwayatTransaksi.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        btnViewRiwayatTransaksi.setText("View Riwayat Transaksi");
+        btnViewRiwayatTransaksi.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnViewRiwayatTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewRiwayatTransaksiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(295, 295, 295)
-                        .addComponent(jButton37, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54)
-                        .addComponent(jButton38)
-                        .addGap(55, 55, 55)
-                        .addComponent(jButton41))
+                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(btnViewRiwayatTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnViewDetailProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(338, 338, 338))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane12)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton38, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton41, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(49, 49, 49))))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel79)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField68, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(stok_saat_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel77)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField66, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(harga_beli, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel72)
@@ -259,21 +367,25 @@ public class FormProduk extends javax.swing.JPanel {
                                     .addComponent(jLabel75)
                                     .addComponent(jLabel76))
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(telp_supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel5Layout.createSequentialGroup()
                                         .addGap(30, 30, 30)
                                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField64)
-                                            .addComponent(jTextField62)
-                                            .addComponent(jTextField63, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                                            .addComponent(jTextField61)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                                        .addComponent(jTextField65, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(kategori, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(nama_produk, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(nama_supplier)))))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel78)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField67, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(harga_jual, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(78, 78, 78)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel84)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -285,95 +397,100 @@ public class FormProduk extends javax.swing.JPanel {
                             .addComponent(jLabel85)
                             .addComponent(jLabel74))
                         .addGap(49, 49, 49)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField70)
-                            .addComponent(jTextField69)
-                            .addComponent(jTextField71)
-                            .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton36)
-                            .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(jButton40)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField72, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton39, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 1125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(345, Short.MAX_VALUE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(tanggal_expired, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(stok_minimum, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(status, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jenis, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(satuan, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(146, 146, 146))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField63, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField69, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel72)
-                                .addComponent(jTextField61, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel81)))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel73)
-                            .addComponent(jTextField62, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel80)
-                            .addComponent(jTextField71, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(30, 30, 30)
+                .addGap(16, 16, 16)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel75)
-                    .addComponent(jTextField64, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel82)
-                    .addComponent(jTextField70, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                    .addComponent(jLabel72)
+                    .addComponent(nama_produk, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField65, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel85)
-                    .addComponent(jButton36))
-                .addGap(24, 24, 24)
+                    .addComponent(jLabel73)
+                    .addComponent(kategori, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField66, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel77)
-                    .addComponent(jLabel74)
-                    .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
+                    .addComponent(nama_supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel75))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField67, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel78)
-                    .addComponent(jLabel83)
-                    .addComponent(jComboBox12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(telp_supplier, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(harga_beli, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel77))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(harga_jual, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel78))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(stok_saat_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel79))
+                .addGap(886, 886, 886))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField68, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel79)
-                        .addComponent(jLabel84))
-                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGap(109, 109, 109)
+                            .addComponent(jLabel82))
+                        .addGroup(jPanel5Layout.createSequentialGroup()
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel81)
+                                .addComponent(satuan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(21, 21, 21)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel80)
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGap(1, 1, 1)
+                                    .addComponent(stok_minimum, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(18, 18, 18)
+                            .addComponent(tanggal_expired, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel85))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel74)
+                                .addComponent(jenis, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel83)
+                                .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel84)
+                                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton37)
-                    .addComponent(jButton38)
-                    .addComponent(jButton41))
-                .addGap(33, 33, 33)
+                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnViewDetailProduk, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnViewRiwayatTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton40)
-                    .addComponent(jTextField72, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton42)
-                    .addComponent(jButton39))
-                .addGap(70, 70, 70)
-                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(253, Short.MAX_VALUE))
+                    .addComponent(jButton38, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton41, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(411, 411, 411))
         );
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.CENTER);
@@ -381,25 +498,316 @@ public class FormProduk extends javax.swing.JPanel {
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
-
+    // ==================== INISIALISASI ====================
+    
+    /**
+     * Setup ComboBox dengan data
+     */
+    private void setupComboBoxes() {
+        // ComboBox Kategori Produk
+        kategori.removeAllItems();
+        kategori.addItem("Hair Care");
+        kategori.addItem("Hair Coloring");
+        kategori.addItem("Nail Care");
+        kategori.addItem("Skin Care");
+        
+        // ComboBox Jenis
+        jenis.removeAllItems();
+        jenis.addItem("Dijual");
+        jenis.addItem("Layanan");
+        jenis.addItem("Dijual & Layanan");
+        
+        // ⭐ ComboBox Satuan (BARU)
+        satuan.removeAllItems();
+        satuan.addItem("Botol");
+        satuan.addItem("Tube");
+        satuan.addItem("Sachet");
+        satuan.addItem("Box");
+        satuan.addItem("Pcs");
+        satuan.addItem("Pack");
+        satuan.addItem("Liter");
+        satuan.addItem("Ml");
+        
+        // ComboBox Status
+        status.removeAllItems();
+        status.addItem("Aktif");
+        status.addItem("Non-Aktif");
+    }
+    
+    /**
+     * Inisialisasi struktur tabel
+     */
+    private void initTable() {
+        String[] kolom = {
+            "Kode",
+            "Nama Produk",
+            "Kategori",
+            "Jenis",
+            "Harga Jual",
+            "Stok",
+            "Satuan",
+            "Status"
+        };
+        
+        tableModel = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        tabel_produk.setModel(tableModel);
+        tabel_produk.setRowHeight(25);
+        tabel_produk.getTableHeader().setReorderingAllowed(false);
+        
+        // Atur lebar kolom
+        tabel_produk.getColumnModel().getColumn(0).setPreferredWidth(80);   // Kode
+        tabel_produk.getColumnModel().getColumn(1).setPreferredWidth(200);  // Nama
+        tabel_produk.getColumnModel().getColumn(2).setPreferredWidth(100);  // Kategori
+        tabel_produk.getColumnModel().getColumn(3).setPreferredWidth(120);  // Jenis
+        tabel_produk.getColumnModel().getColumn(4).setPreferredWidth(100);  // Harga
+        tabel_produk.getColumnModel().getColumn(5).setPreferredWidth(70);   // Stok
+        tabel_produk.getColumnModel().getColumn(6).setPreferredWidth(70);   // Satuan
+        tabel_produk.getColumnModel().getColumn(7).setPreferredWidth(70);   // Status
+    }
+    
+    /**
+     * Load data dari database ke tabel
+     */
+    private void loadDataToTable() {
+        tableModel.setRowCount(0);
+        
+        List<Produk> dataProduk = produkDAO.getAll();
+        NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        
+        for (Produk p : dataProduk) {
+            Object[] row = {
+                p.getKodeProduk(),
+                p.getNamaProduk(),
+                p.getKategoriProduk(),
+                p.getJenis(),
+                rupiah.format(p.getHargaJual()),
+                p.getStokSaatIni(),
+                p.getSatuan(),
+                p.getStatus()
+            };
+            tableModel.addRow(row);
+        }
+    }
+    
+    // ==================== VALIDASI & HELPER ====================
+    
+    /**
+     * Ambil data dari form → objek Produk
+     */
+    private Produk getProdukFromForm() throws Exception {
+        // Validasi nama produk
+        String nama = nama_produk.getText().trim();
+        if (nama.isEmpty()) {
+            throw new Exception("Nama Produk tidak boleh kosong!");
+        }
+        
+        // Validasi harga beli
+        String hargaBeliStr = harga_beli.getText().trim();
+        if (hargaBeliStr.isEmpty()) {
+            throw new Exception("Harga Beli tidak boleh kosong!");
+        }
+        double hargaBeli = 0;
+        try {
+            hargaBeli = Double.parseDouble(hargaBeliStr);
+            if (hargaBeli < 0) {
+                throw new Exception("Harga Beli tidak boleh negatif!");
+            }
+        } catch (NumberFormatException e) {
+            throw new Exception("Format Harga Beli tidak valid!");
+        }
+        
+        // Validasi harga jual
+        String hargaJualStr = harga_jual.getText().trim();
+        if (hargaJualStr.isEmpty()) {
+            throw new Exception("Harga Jual tidak boleh kosong!");
+        }
+        double hargaJual = 0;
+        try {
+            hargaJual = Double.parseDouble(hargaJualStr);
+            if (hargaJual < 0) {
+                throw new Exception("Harga Jual tidak boleh negatif!");
+            }
+            if (hargaJual < hargaBeli) {
+                int konfirm = JOptionPane.showConfirmDialog(this,
+                    "Harga Jual lebih rendah dari Harga Beli!\n" +
+                    "Anda akan rugi. Tetap lanjutkan?",
+                    "Peringatan",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                
+                if (konfirm != JOptionPane.YES_OPTION) {
+                    throw new Exception("Input dibatalkan.");
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new Exception("Format Harga Jual tidak valid!");
+        }
+        
+        // Validasi stok saat ini
+        String stokStr = stok_saat_ini.getText().trim();
+        if (stokStr.isEmpty()) {
+            throw new Exception("Stok Saat Ini tidak boleh kosong!");
+        }
+        int stok = 0;
+        try {
+            stok = Integer.parseInt(stokStr);
+            if (stok < 0) {
+                throw new Exception("Stok tidak boleh negatif!");
+            }
+        } catch (NumberFormatException e) {
+            throw new Exception("Format Stok tidak valid!");
+        }
+        
+        // Validasi stok minimum
+        String stokMinStr = stok_minimum.getText().trim();
+        if (stokMinStr.isEmpty()) {
+            throw new Exception("Stok Minimum tidak boleh kosong!");
+        }
+        int stokMin = 0;
+        try {
+            stokMin = Integer.parseInt(stokMinStr);
+            if (stokMin < 0) {
+                throw new Exception("Stok Minimum tidak boleh negatif!");
+            }
+        } catch (NumberFormatException e) {
+            throw new Exception("Format Stok Minimum tidak valid!");
+        }
+        
+        // Buat objek Produk
+        Produk produk = new Produk();
+        produk.setNamaProduk(nama);
+        produk.setKategoriProduk(kategori.getSelectedItem().toString());
+        produk.setJenis(jenis.getSelectedItem().toString());
+        produk.setNamaSupplier(nama_supplier.getText().trim());
+        produk.setTeleponSupplier(telp_supplier.getText().trim());
+        produk.setHargaBeli(hargaBeli);
+        produk.setHargaJual(hargaJual);
+        produk.setStokSaatIni(stok);
+        produk.setStokMinimum(stokMin);
+        produk.setSatuan(satuan.getSelectedItem().toString()); // ⭐ Dari ComboBox
+        produk.setTanggalExpired(tanggal_expired.getDate());
+        produk.setStatus(status.getSelectedItem().toString());
+        produk.setDeskripsi(deskripsi.getText().trim());
+        produk.setFotoProduk(selectedFotoPath);
+        
+        return produk;
+    }
+    
+        /**
+     ** Helper: Get file extension
+     */
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1).toLowerCase();
+        }
+        return "";
+    }
+    
+    /**
+     * Reset/clear form
+     */
+    private void clearForm() {
+        nama_produk.setText("");
+        kategori.setSelectedIndex(0);
+        jenis.setSelectedIndex(0);
+        nama_supplier.setText("");
+        telp_supplier.setText("");
+        harga_beli.setText("");
+        harga_jual.setText("");
+        stok_saat_ini.setText("");
+        stok_minimum.setText("5");
+        satuan.setSelectedIndex(0); // ⭐ Reset ComboBox Satuan
+        tanggal_expired.setDate(null);
+        status.setSelectedIndex(0);
+        deskripsi.setText("");
+        selectedFotoPath = null;
+        selectedProduk = null;
+        tabel_produk.clearSelection();
+        
+        nama_produk.requestFocus();
+    }
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+    if (selectedProduk == null) {
+            JOptionPane.showMessageDialog(this,
+                "Pilih data di tabel yang akan dihapus!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int konfirmasi = JOptionPane.showConfirmDialog(this,
+            "Yakin ingin menghapus produk:\n" +
+            selectedProduk.getNamaProduk() + " (" + selectedProduk.getKodeProduk() + ")?",
+            "Konfirmasi Hapus",
+            JOptionPane.YES_NO_OPTION);
+        
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            boolean success = produkDAO.delete(selectedProduk.getKodeProduk());
+            
+            if (success) {
+                loadDataToTable();
+                JOptionPane.showMessageDialog(this,
+                    "Data produk berhasil dihapus!",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                clearForm();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Gagal menghapus data produk!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+// TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+    if (selectedProduk == null) {
+            JOptionPane.showMessageDialog(this,
+                "Pilih data di tabel yang akan diubah!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            Produk updated = getProdukFromForm();
+            updated.setKodeProduk(selectedProduk.getKodeProduk());
+            
+            boolean success = produkDAO.update(updated);
+            
+            if (success) {
+                loadDataToTable();
+                JOptionPane.showMessageDialog(this,
+                    "Data produk berhasil diubah!",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                clearForm();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Gagal mengubah data produk!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
+// TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField13ActionPerformed
-
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
 
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
         // TODO add your handling code here:
@@ -413,131 +821,390 @@ public class FormProduk extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    private void btnViewDetailProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDetailProdukActionPerformed
+    isViewRiwayatMode = false;
+    
+    String[] kolomDetail = {
+        "Kode",
+        "Nama Produk",
+        "Kategori",
+        "Jenis",
+        "Harga Beli",
+        "Harga Jual",
+        "Margin",
+        "% Margin",
+        "Stok",
+        "Supplier"
+    };
+    
+    tableModel = new DefaultTableModel(kolomDetail, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    
+    tabel_produk.setModel(tableModel);
+    tabel_produk.setRowHeight(25);
+    
+    // Atur lebar kolom
+    tabel_produk.getColumnModel().getColumn(0).setPreferredWidth(80);   // Kode
+    tabel_produk.getColumnModel().getColumn(1).setPreferredWidth(150);  // Nama
+    tabel_produk.getColumnModel().getColumn(2).setPreferredWidth(90);   // Kategori
+    tabel_produk.getColumnModel().getColumn(3).setPreferredWidth(100);  // Jenis
+    tabel_produk.getColumnModel().getColumn(4).setPreferredWidth(100);  // Harga Beli
+    tabel_produk.getColumnModel().getColumn(5).setPreferredWidth(100);  // Harga Jual
+    tabel_produk.getColumnModel().getColumn(6).setPreferredWidth(100);  // Margin
+    tabel_produk.getColumnModel().getColumn(7).setPreferredWidth(80);   // % Margin
+    tabel_produk.getColumnModel().getColumn(8).setPreferredWidth(60);   // Stok
+    tabel_produk.getColumnModel().getColumn(9).setPreferredWidth(130);  // Supplier
+    
+    // Ambil semua data produk
+    List<Produk> dataProduk = produkDAO.getAll();
+    
+    NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+    
+    double totalMargin = 0;
+    int totalStok = 0;
+    
+    for (Produk p : dataProduk) {
+        double margin = p.getMargin();
+        double persenMargin = p.getPersentaseMargin();
+        
+        totalMargin += margin;
+        totalStok += p.getStokSaatIni();
+        
+        // Format persentase margin
+        String persenStr = String.format("%.1f%%", persenMargin);
+        
+        Object[] row = {
+            p.getKodeProduk(),
+            p.getNamaProduk(),
+            p.getKategoriProduk(),
+            p.getJenis(),
+            rupiah.format(p.getHargaBeli()),
+            rupiah.format(p.getHargaJual()),
+            rupiah.format(margin),
+            persenStr,
+            p.getStokSaatIni() + " " + p.getSatuan(),
+            p.getNamaSupplier() != null ? p.getNamaSupplier() : "-"
+        };
+        tableModel.addRow(row);
+    }
+    
+    // Tambahkan row TOTAL MARGIN
+    Object[] rowTotal = {
+        "",
+        "",
+        "",
+        "TOTAL",
+        "",
+        "",
+        rupiah.format(totalMargin),
+        "",
+        totalStok + " items",
+        ""
+    };
+    tableModel.addRow(rowTotal);
+    
+    JOptionPane.showMessageDialog(this,
+        "View Detail Produk berhasil ditampilkan!\n" +
+        "Total Produk: " + dataProduk.size() + "\n" +
+        "Total Stok: " + totalStok + " items\n" +
+        "Total Potensi Margin: " + rupiah.format(totalMargin),
+        "Info Detail Produk",
+        JOptionPane.INFORMATION_MESSAGE);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnViewDetailProdukActionPerformed
+
+    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField13ActionPerformed
+
+    private void satuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_satuanActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_satuanActionPerformed
+
+    private void uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Pilih Foto Produk");
+    
+    // Filter hanya gambar
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "Image Files", "jpg", "jpeg", "png", "gif");
+    fileChooser.setFileFilter(filter);
+    
+    int result = fileChooser.showOpenDialog(this);
+    
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+        
+        try {
+            // Buat folder untuk menyimpan foto jika belum ada
+            File folderFoto = new File("foto_produk");
+            if (!folderFoto.exists()) {
+                folderFoto.mkdir();
+            }
+            
+            // Copy file ke folder foto_produk dengan nama unik
+            String extension = getFileExtension(selectedFile.getName());
+            String newFileName = "produk_" + System.currentTimeMillis() + "." + extension;
+            File destFile = new File(folderFoto, newFileName);
+            
+            Files.copy(selectedFile.toPath(), destFile.toPath(), 
+                      StandardCopyOption.REPLACE_EXISTING);
+            
+            // Simpan path relatif
+            selectedFotoPath = "foto_produk/" + newFileName;
+            
+            JOptionPane.showMessageDialog(this,
+                "Foto berhasil diupload!\n" +
+                "File: " + newFileName,
+                "Sukses",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                "Gagal mengupload foto: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_uploadActionPerformed
+
+    private void tabel_produkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabel_produkMouseClicked
+    int row = tabel_produk.getSelectedRow();
+    if (row == -1) return;
+    
+    String kode = tabel_produk.getValueAt(row, 0).toString();
+    selectedProduk = produkDAO.getByKode(kode);
+    
+    if (selectedProduk != null) {
+        nama_produk.setText(selectedProduk.getNamaProduk());
+        kategori.setSelectedItem(selectedProduk.getKategoriProduk());
+        jenis.setSelectedItem(selectedProduk.getJenis());
+        nama_supplier.setText(selectedProduk.getNamaSupplier());
+        telp_supplier.setText(selectedProduk.getTeleponSupplier());
+        harga_beli.setText(String.valueOf((int) selectedProduk.getHargaBeli()));
+        harga_jual.setText(String.valueOf((int) selectedProduk.getHargaJual()));
+        stok_saat_ini.setText(String.valueOf(selectedProduk.getStokSaatIni()));
+        stok_minimum.setText(String.valueOf(selectedProduk.getStokMinimum()));
+        satuan.setSelectedItem(selectedProduk.getSatuan());
+        tanggal_expired.setDate(selectedProduk.getTanggalExpired());
+        status.setSelectedItem(selectedProduk.getStatus());
+        deskripsi.setText(selectedProduk.getDeskripsi());
+        
+        // ⭐ Simpan path foto (tanpa preview)
+        selectedFotoPath = selectedProduk.getFotoProduk();
+    }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_tabel_produkMouseClicked
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+     try {
+            Produk produk = getProdukFromForm();
+            
+            // Generate kode otomatis
+            String kode = produkDAO.generateKodeProduk();
+            produk.setKodeProduk(kode);
+            
+            // Simpan ke database
+            boolean success = produkDAO.insert(produk);
+            
+            if (success) {
+                loadDataToTable();
+                JOptionPane.showMessageDialog(this,
+                    "Produk berhasil ditambahkan dengan kode: " + kode,
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                clearForm();
+                
+                // Alert jika stok sudah menipis
+                if (produk.isStokMenipis()) {
+                    JOptionPane.showMessageDialog(this,
+                        "⚠️ PERHATIAN!\n\n" +
+                        "Stok produk " + produk.getNamaProduk() + " sudah menipis!\n" +
+                        "Stok saat ini: " + produk.getStokSaatIni() + " " + produk.getSatuan() + "\n" +
+                        "Stok minimum: " + produk.getStokMinimum() + " " + produk.getSatuan(),
+                        "Alert Stok",
+                        JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "Gagal menyimpan data produk!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+     String keyword = txtCari.getText().trim();
+        
+        if (keyword.isEmpty()) {
+            if (isViewRiwayatMode) {
+                btnViewRiwayatTransaksiActionPerformed(null);
+            } else {
+                loadDataToTable();
+            }
+            return;
+        }
+        
+        tableModel.setRowCount(0);
+        List<Produk> results = produkDAO.search(keyword);
+        NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        
+        for (Produk p : results) {
+            Object[] row = {
+                p.getKodeProduk(),
+                p.getNamaProduk(),
+                p.getKategoriProduk(),
+                p.getJenis(),
+                rupiah.format(p.getHargaJual()),
+                p.getStokSaatIni(),
+                p.getSatuan(),
+                p.getStatus()
+            };
+            tableModel.addRow(row);
+        }
+        
+        if (results.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Tidak ada data yang cocok dengan keyword: " + keyword,
+                "Info Pencarian",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+    clearForm();
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnViewRiwayatTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRiwayatTransaksiActionPerformed
+    isViewRiwayatMode = true;
+    
+    String[] kolomRiwayat = {
+        "Kode Produk",
+        "Nama Produk",
+        "Kategori",
+        "Total Terjual",
+        "Satuan",
+        "Harga Jual",
+        "Total Pendapatan"
+    };
+    
+    tableModel = new DefaultTableModel(kolomRiwayat, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    
+    tabel_produk.setModel(tableModel);
+    tabel_produk.setRowHeight(25);
+    
+    // Atur lebar kolom
+    tabel_produk.getColumnModel().getColumn(0).setPreferredWidth(90);   // Kode
+    tabel_produk.getColumnModel().getColumn(1).setPreferredWidth(180);  // Nama
+    tabel_produk.getColumnModel().getColumn(2).setPreferredWidth(100);  // Kategori
+    tabel_produk.getColumnModel().getColumn(3).setPreferredWidth(90);   // Total Terjual
+    tabel_produk.getColumnModel().getColumn(4).setPreferredWidth(70);   // Satuan
+    tabel_produk.getColumnModel().getColumn(5).setPreferredWidth(110);  // Harga
+    tabel_produk.getColumnModel().getColumn(6).setPreferredWidth(130);  // Pendapatan
+    
+    // Ambil data riwayat transaksi dari database
+    List<Object[]> riwayat = produkDAO.getRiwayatTransaksi();
+    
+    NumberFormat rupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+    
+    if (riwayat.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+            "Belum ada riwayat transaksi produk.",
+            "Info",
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        // Tampilkan row kosong
+        Object[] rowKosong = {
+            "-", "-", "-", "0", "-", "-", "Rp 0"
+        };
+        tableModel.addRow(rowKosong);
+    } else {
+        double totalPendapatan = 0;
+        
+        for (Object[] row : riwayat) {
+            String kode = (String) row[0];
+            String nama = (String) row[1];
+            String kategori = (String) row[2];
+            int totalTerjual = (int) row[3];
+            String satuan = (String) row[4];
+            double hargaJual = (double) row[5];
+            double pendapatan = totalTerjual * hargaJual;
+            
+            totalPendapatan += pendapatan;
+            
+            Object[] rowData = {
+                kode,
+                nama,
+                kategori,
+                totalTerjual,
+                satuan,
+                rupiah.format(hargaJual),
+                rupiah.format(pendapatan)
+            };
+            tableModel.addRow(rowData);
+        }
+        
+        // Tambahkan row TOTAL di akhir
+        Object[] rowTotal = {
+            "",
+            "",
+            "TOTAL PENDAPATAN",
+            "",
+            "",
+            "",
+            rupiah.format(totalPendapatan)
+        };
+        tableModel.addRow(rowTotal);
+        
+        JOptionPane.showMessageDialog(this,
+            "View Riwayat Transaksi berhasil ditampilkan!\n" +
+            "Total Pendapatan: " + rupiah.format(totalPendapatan),
+            "Info Riwayat Transaksi",
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnViewRiwayatTransaksiActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton22;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton24;
-    private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton28;
-    private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
-    private javax.swing.JButton jButton34;
-    private javax.swing.JButton jButton35;
-    private javax.swing.JButton jButton36;
-    private javax.swing.JButton jButton37;
+    private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnTambah;
+    private javax.swing.JButton btnViewDetailProduk;
+    private javax.swing.JButton btnViewRiwayatTransaksi;
+    private javax.swing.JTextArea deskripsi;
+    private javax.swing.JTextField harga_beli;
+    private javax.swing.JTextField harga_jual;
     private javax.swing.JButton jButton38;
-    private javax.swing.JButton jButton39;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton40;
     private javax.swing.JButton jButton41;
-    private javax.swing.JButton jButton42;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox10;
-    private javax.swing.JComboBox<String> jComboBox11;
-    private javax.swing.JComboBox<String> jComboBox12;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JComboBox<String> jComboBox7;
-    private javax.swing.JComboBox<String> jComboBox8;
-    private javax.swing.JComboBox<String> jComboBox9;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel40;
-    private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
-    private javax.swing.JLabel jLabel44;
-    private javax.swing.JLabel jLabel45;
-    private javax.swing.JLabel jLabel46;
-    private javax.swing.JLabel jLabel47;
-    private javax.swing.JLabel jLabel48;
-    private javax.swing.JLabel jLabel49;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
-    private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel52;
-    private javax.swing.JLabel jLabel53;
-    private javax.swing.JLabel jLabel54;
-    private javax.swing.JLabel jLabel55;
-    private javax.swing.JLabel jLabel56;
-    private javax.swing.JLabel jLabel57;
-    private javax.swing.JLabel jLabel58;
-    private javax.swing.JLabel jLabel59;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel60;
-    private javax.swing.JLabel jLabel61;
-    private javax.swing.JLabel jLabel62;
-    private javax.swing.JLabel jLabel63;
-    private javax.swing.JLabel jLabel64;
-    private javax.swing.JLabel jLabel65;
-    private javax.swing.JLabel jLabel66;
-    private javax.swing.JLabel jLabel67;
-    private javax.swing.JLabel jLabel68;
-    private javax.swing.JLabel jLabel69;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel70;
-    private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel74;
@@ -546,117 +1213,29 @@ public class FormProduk extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel77;
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel80;
     private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JScrollPane jScrollPane9;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
-    private javax.swing.JTable jTable6;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
-    private javax.swing.JTextArea jTextArea5;
-    private javax.swing.JTextArea jTextArea6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField20;
-    private javax.swing.JTextField jTextField21;
-    private javax.swing.JTextField jTextField22;
-    private javax.swing.JTextField jTextField23;
-    private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField25;
-    private javax.swing.JTextField jTextField26;
-    private javax.swing.JTextField jTextField27;
-    private javax.swing.JTextField jTextField28;
-    private javax.swing.JTextField jTextField29;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField30;
-    private javax.swing.JTextField jTextField31;
-    private javax.swing.JTextField jTextField32;
-    private javax.swing.JTextField jTextField33;
-    private javax.swing.JTextField jTextField34;
-    private javax.swing.JTextField jTextField35;
-    private javax.swing.JTextField jTextField36;
-    private javax.swing.JTextField jTextField37;
-    private javax.swing.JTextField jTextField38;
-    private javax.swing.JTextField jTextField39;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField40;
-    private javax.swing.JTextField jTextField41;
-    private javax.swing.JTextField jTextField42;
-    private javax.swing.JTextField jTextField43;
-    private javax.swing.JTextField jTextField44;
-    private javax.swing.JTextField jTextField45;
-    private javax.swing.JTextField jTextField46;
-    private javax.swing.JTextField jTextField47;
-    private javax.swing.JTextField jTextField48;
-    private javax.swing.JTextField jTextField49;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField50;
-    private javax.swing.JTextField jTextField51;
-    private javax.swing.JTextField jTextField52;
-    private javax.swing.JTextField jTextField53;
-    private javax.swing.JTextField jTextField54;
-    private javax.swing.JTextField jTextField55;
-    private javax.swing.JTextField jTextField56;
-    private javax.swing.JTextField jTextField57;
-    private javax.swing.JTextField jTextField58;
-    private javax.swing.JTextField jTextField59;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField60;
-    private javax.swing.JTextField jTextField61;
-    private javax.swing.JTextField jTextField62;
-    private javax.swing.JTextField jTextField63;
-    private javax.swing.JTextField jTextField64;
-    private javax.swing.JTextField jTextField65;
-    private javax.swing.JTextField jTextField66;
-    private javax.swing.JTextField jTextField67;
-    private javax.swing.JTextField jTextField68;
-    private javax.swing.JTextField jTextField69;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField70;
-    private javax.swing.JTextField jTextField71;
-    private javax.swing.JTextField jTextField72;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JComboBox<String> jenis;
+    private javax.swing.JComboBox<String> kategori;
+    private javax.swing.JTextField nama_produk;
+    private javax.swing.JTextField nama_supplier;
+    private javax.swing.JComboBox<String> satuan;
+    private javax.swing.JComboBox<String> status;
+    private javax.swing.JTextField stok_minimum;
+    private javax.swing.JTextField stok_saat_ini;
+    private javax.swing.JTable tabel_produk;
+    private com.toedter.calendar.JDateChooser tanggal_expired;
+    private javax.swing.JTextField telp_supplier;
+    private javax.swing.JTextField txtCari;
+    private javax.swing.JButton upload;
     // End of variables declaration//GEN-END:variables
 }

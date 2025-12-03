@@ -90,7 +90,7 @@ public class FormTransaksiLayanan extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jLabel3)
-                .addContainerGap(1388, Short.MAX_VALUE))
+                .addContainerGap(1314, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,7 +206,7 @@ public class FormTransaksiLayanan extends javax.swing.JPanel {
                             .addComponent(jLabel8)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -410,7 +410,7 @@ public class FormTransaksiLayanan extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPane1)))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,7 +438,7 @@ public class FormTransaksiLayanan extends javax.swing.JPanel {
                     .addComponent(jButton6))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.CENTER);

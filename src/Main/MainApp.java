@@ -135,6 +135,8 @@ public class MainApp extends javax.swing.JFrame {
         });
 
         sidebar.setBackground(new java.awt.Color(255, 255, 255));
+        sidebar.setPreferredSize(new java.awt.Dimension(427, 1356));
+        sidebar.setRequestFocusEnabled(false);
         sidebar.setLayout(new java.awt.BorderLayout());
 
         jLabel2.setFont(new java.awt.Font("Monotype Corsiva", 1, 50)); // NOI18N
@@ -171,10 +173,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_dashboardLayout.setHorizontalGroup(
             pnl_dashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_dashboardLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_dashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_dashboardLayout.createSequentialGroup()
@@ -223,10 +225,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_layananLayout.setHorizontalGroup(
             pnl_layananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_layananLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_layananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_layananLayout.createSequentialGroup()
@@ -272,10 +274,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_karyawanLayout.setHorizontalGroup(
             pnl_karyawanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_karyawanLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_karyawanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_karyawanLayout.createSequentialGroup()
@@ -321,10 +323,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_pelangganLayout.setHorizontalGroup(
             pnl_pelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_pelangganLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_pelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_pelangganLayout.createSequentialGroup()
@@ -370,10 +372,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_produkLayout.setHorizontalGroup(
             pnl_produkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_produkLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_produkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_produkLayout.createSequentialGroup()
@@ -419,10 +421,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_arsipdokumenLayout.setHorizontalGroup(
             pnl_arsipdokumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_arsipdokumenLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_arsipdokumenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_arsipdokumenLayout.createSequentialGroup()
@@ -471,10 +473,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_transaksilayananLayout.setHorizontalGroup(
             pnl_transaksilayananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_transaksilayananLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_transaksilayananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_transaksilayananLayout.createSequentialGroup()
@@ -520,10 +522,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_absensiLayout.setHorizontalGroup(
             pnl_absensiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_absensiLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_absensiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_absensiLayout.createSequentialGroup()
@@ -569,10 +571,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_produkbeliLayout.setHorizontalGroup(
             pnl_produkbeliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_produkbeliLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_produkbeliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_produkbeliLayout.createSequentialGroup()
@@ -618,10 +620,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_produkjualLayout.setHorizontalGroup(
             pnl_produkjualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_produkjualLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_produkjualLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_produkjualLayout.createSequentialGroup()
@@ -670,10 +672,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_laporankeuanganLayout.setHorizontalGroup(
             pnl_laporankeuanganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_laporankeuanganLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel25)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_laporankeuanganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_laporankeuanganLayout.createSequentialGroup()
@@ -719,10 +721,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_laporanoperasionalLayout.setHorizontalGroup(
             pnl_laporanoperasionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_laporanoperasionalLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_laporanoperasionalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_laporanoperasionalLayout.createSequentialGroup()
@@ -768,10 +770,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_laporanstokLayout.setHorizontalGroup(
             pnl_laporanstokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_laporanstokLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel29)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_laporanstokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_laporanstokLayout.createSequentialGroup()
@@ -817,10 +819,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_laporancustomerLayout.setHorizontalGroup(
             pnl_laporancustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_laporancustomerLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel31)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_laporancustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_laporancustomerLayout.createSequentialGroup()
@@ -866,10 +868,10 @@ public class MainApp extends javax.swing.JFrame {
         pnl_laporanarsipLayout.setHorizontalGroup(
             pnl_laporanarsipLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnl_laporanarsipLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap(37, Short.MAX_VALUE)
                 .addComponent(jLabel33)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(pnl_laporanarsipLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnl_laporanarsipLayout.createSequentialGroup()
@@ -976,7 +978,7 @@ public class MainApp extends javax.swing.JFrame {
         navbar.setLayout(navbarLayout);
         navbarLayout.setHorizontalGroup(
             navbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1184, Short.MAX_VALUE)
+            .addGap(0, 1136, Short.MAX_VALUE)
         );
         navbarLayout.setVerticalGroup(
             navbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
