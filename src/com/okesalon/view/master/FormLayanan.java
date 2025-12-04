@@ -13,6 +13,7 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author T480
@@ -30,7 +31,7 @@ public class FormLayanan extends javax.swing.JPanel {
         initComponents();
         layananDAO = new LayananDAO();  // Inisialisasi DAO
         initTable();
-        // Load data (nanti dari database via DAO)
+        setupStatusRenderer();
         loadDataToTable();
     }
 
@@ -495,7 +496,34 @@ public class FormLayanan extends javax.swing.JPanel {
     // Clear preview foto jika ada
     // lblPreviewFoto.setIcon(null);
 }
-    
+    private void setupStatusRenderer() {
+        tabel_layanan.getColumnModel().getColumn(5).setCellRenderer(
+            new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value,
+                        boolean isSelected, boolean hasFocus, int row, int column) {
+
+                    Component cell = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                    String status = (String) value;
+
+                    if (!isSelected) {
+                        if ("Aktif".equals(status)) {
+                            cell.setBackground(new Color(220, 255, 220));  // Hijau muda
+                            cell.setForeground(new Color(0, 128, 0));      // Hijau tua
+                        } else if ("Non-Aktif".equals(status)) {
+                            cell.setBackground(new Color(255, 220, 220));  // Merah muda
+                            cell.setForeground(new Color(200, 0, 0));    
+                        }
+                    }
+
+                    setHorizontalAlignment(SwingConstants.CENTER);
+                    return cell;
+                }
+            }
+        );
+    }
     
 
     

@@ -8,12 +8,16 @@ package com.okesalon.view.master;
 import com.okesalon.dao.PelangganDAO;
 import com.okesalon.model.Pelanggan;
 import com.toedter.calendar.JDateChooser;
+import java.awt.Color;
+import java.awt.Component;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author T480
@@ -25,6 +29,7 @@ public class FormPelanggan extends javax.swing.JPanel {
     private PelangganDAO pelangganDAO;
     private Pelanggan selectedPelanggan = null;
     private boolean isViewMemberMode = false;
+    private String currentUser = "admin";
     
     
     /** Creates new form FormPelanggan */
@@ -33,7 +38,10 @@ public class FormPelanggan extends javax.swing.JPanel {
         pelangganDAO = new PelangganDAO();
         initTable();
         setupDynamicDiscount();
+        setupStatusRenderer();
         loadDataToTable();
+        
+        setupSoftDeleteButton();
         
 
     }
@@ -86,6 +94,7 @@ public class FormPelanggan extends javax.swing.JPanel {
         jLabel93 = new javax.swing.JLabel();
         alamat = new javax.swing.JTextField();
         diskon = new javax.swing.JTextField();
+        btnRestore = new javax.swing.JButton();
 
         setLayout(new java.awt.CardLayout());
 
@@ -233,7 +242,7 @@ public class FormPelanggan extends javax.swing.JPanel {
         });
 
         btnHapus.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnHapus.setText("HAPUS");
+        btnHapus.setText("NON-AKTIFKAN");
         btnHapus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,6 +288,15 @@ public class FormPelanggan extends javax.swing.JPanel {
         diskon.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         diskon.setText("0%");
 
+        btnRestore.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnRestore.setText("RESTORE");
+        btnRestore.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestoreActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -286,9 +304,6 @@ public class FormPelanggan extends javax.swing.JPanel {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 1424, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel10Layout.createSequentialGroup()
@@ -348,15 +363,20 @@ public class FormPelanggan extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel10Layout.createSequentialGroup()
-                                .addGap(1209, 1209, 1209)
-                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel10Layout.createSequentialGroup()
                                 .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel10Layout.createSequentialGroup()
+                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 1424, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,9 +428,8 @@ public class FormPelanggan extends javax.swing.JPanel {
                             .addComponent(tanggal_lahir, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(rbLakiLaki)
-                                .addComponent(rbPerempuan))
+                            .addComponent(rbPerempuan)
+                            .addComponent(rbLakiLaki)
                             .addComponent(jLabel84))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,11 +451,12 @@ public class FormPelanggan extends javax.swing.JPanel {
                             .addComponent(txtCari))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(136, 136, 136))
+                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRestore, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel10, java.awt.BorderLayout.CENTER);
@@ -458,7 +478,8 @@ public class FormPelanggan extends javax.swing.JPanel {
             "Jenis Kelamin",
             "Membership", 
             "Discount",
-            "Total Spending"
+            "Total Spending",
+            "Status"    
         };
         
         tableModel = new DefaultTableModel(kolom, 0) {
@@ -480,7 +501,8 @@ public class FormPelanggan extends javax.swing.JPanel {
         tabel_pelanggan.getColumnModel().getColumn(4).setPreferredWidth(100);  // Jenis Kelamin
         tabel_pelanggan.getColumnModel().getColumn(5).setPreferredWidth(90);   // Membership
         tabel_pelanggan.getColumnModel().getColumn(6).setPreferredWidth(70);   // Discount
-        tabel_pelanggan.getColumnModel().getColumn(7).setPreferredWidth(120);  // Total Spending
+        tabel_pelanggan.getColumnModel().getColumn(7).setPreferredWidth(120);
+        tabel_pelanggan.getColumnModel().getColumn(8).setPreferredWidth(80);// Total Spending
     }
     
     /**
@@ -501,7 +523,8 @@ public class FormPelanggan extends javax.swing.JPanel {
                 p.getJenisKelamin(),
                 p.getMembershipType(),
                 p.getDiscountMember(),
-                rupiah.format(p.getTotalSpending())
+                rupiah.format(p.getTotalSpending()),
+                p.getStatus()
             };
             tableModel.addRow(row);
         }
@@ -543,6 +566,51 @@ public class FormPelanggan extends javax.swing.JPanel {
                break;
        }
    }
+   
+   /**
+ * Setup custom renderer untuk kolom Status (dengan warna)
+ */
+    private void setupStatusRenderer() {
+        tabel_pelanggan.getColumnModel().getColumn(8).setCellRenderer(
+            new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value,
+                        boolean isSelected, boolean hasFocus, int row, int column) {
+
+                    Component cell = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                    String status = (String) value;
+
+                    if (!isSelected) {
+                        if ("Aktif".equals(status)) {
+                            cell.setBackground(new Color(220, 255, 220));  // Hijau muda
+                            cell.setForeground(new Color(0, 128, 0));      // Hijau tua
+                        } else if ("Non-Aktif".equals(status)) {
+                            cell.setBackground(new Color(255, 255, 200));  // Kuning muda
+                            cell.setForeground(new Color(200, 150, 0));    // Kuning tua
+                        } else if ("Deleted".equals(status)) {
+                            cell.setBackground(new Color(255, 220, 220));  // Merah muda
+                            cell.setForeground(new Color(200, 0, 0));      // Merah tua
+                        }
+                    }
+
+                    setHorizontalAlignment(SwingConstants.CENTER);
+                    return cell;
+                }
+            }
+        );
+    }
+   
+   /**
+     * ⭐ Setup button HAPUS untuk soft delete
+     */
+    private void setupSoftDeleteButton() {
+        // Ubah label button HAPUS
+        btnHapus.setText("NON-AKTIFKAN");
+        btnHapus.setToolTipText("Nonaktifkan pelanggan (data tidak akan dihapus permanen)");
+        
+    }
     
     // ==================== VALIDASI & HELPER ====================
     
@@ -561,11 +629,18 @@ public class FormPelanggan extends javax.swing.JPanel {
         if (noTelpon.isEmpty()) {
             throw new Exception("No Telepon tidak boleh kosong!");
         }
+        // ⭐ Validasi format no telepon
+        if (!noTelpon.matches("^(\\+62|62|0)[0-9]{9,12}$")) {
+            throw new Exception("Format No Telepon tidak valid! (Contoh: 081234567890)");
+        }
         
         // Validasi tanggal lahir
         Date tanggalLahir = tanggal_lahir.getDate();
         if (tanggalLahir == null) {
             throw new Exception("Tanggal Lahir tidak boleh kosong!");
+        }
+        if (tanggalLahir.after(new Date())) {
+            throw new Exception("Tanggal Lahir tidak boleh di masa depan!");
         }
         
         // Validasi tanggal registrasi
@@ -586,6 +661,11 @@ public class FormPelanggan extends javax.swing.JPanel {
             } catch (NumberFormatException e) {
                 throw new Exception("Format Total Spending tidak valid!");
             }
+        }
+        
+        // Validasi jenis kelamin harus dipilih
+        if (!rbLakiLaki.isSelected() && !rbPerempuan.isSelected()) {
+            throw new Exception("Pilih Jenis Kelamin!");
         }
         
         // Buat objek Pelanggan
@@ -634,6 +714,8 @@ public class FormPelanggan extends javax.swing.JPanel {
             String kode = pelangganDAO.generateKodePelanggan();
             pelanggan.setKodePelanggan(kode);
             
+            pelanggan.setStatus("Aktif");
+            
             // Simpan ke database
             boolean success = pelangganDAO.insert(pelanggan);
             
@@ -663,74 +745,92 @@ public class FormPelanggan extends javax.swing.JPanel {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
      if (selectedPelanggan == null) {
-            JOptionPane.showMessageDialog(this,
-                "Pilih data di tabel yang akan diubah!",
-                "Peringatan",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        JOptionPane.showMessageDialog(this,
+            "Pilih data di tabel yang akan diubah!",
+            "Peringatan",
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    try {
+        Pelanggan updated = getPelangganFromForm();
+        updated.setKodePelanggan(selectedPelanggan.getKodePelanggan());
         
-        try {
-            Pelanggan updated = getPelangganFromForm();
-            updated.setKodePelanggan(selectedPelanggan.getKodePelanggan());
-            
-            boolean success = pelangganDAO.update(updated);
-            
-            if (success) {
-                loadDataToTable();
-                JOptionPane.showMessageDialog(this,
-                    "Data pelanggan berhasil diubah!",
-                    "Sukses",
-                    JOptionPane.INFORMATION_MESSAGE);
-                clearForm();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                    "Gagal mengubah data pelanggan!",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            }
-            
-        } catch (Exception e) {
+        // ⭐ Pertahankan status existing (JANGAN direset)
+        updated.setStatus(selectedPelanggan.getStatus());
+        
+        // ⭐ Pertahankan soft delete info
+        updated.setDeletedAt(selectedPelanggan.getDeletedAt());
+        updated.setDeletedBy(selectedPelanggan.getDeletedBy());
+        
+        boolean success = pelangganDAO.update(updated);
+        
+        if (success) {
+            loadDataToTable();
             JOptionPane.showMessageDialog(this,
-                e.getMessage(),
+                "✅ Data pelanggan berhasil diubah!",
+                "Sukses",
+                JOptionPane.INFORMATION_MESSAGE);
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "❌ Gagal mengubah data pelanggan!",
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this,
+            e.getMessage(),
+            "Validasi Error",
+            JOptionPane.ERROR_MESSAGE);
+    }
 // TODO add your handling code here:
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
     if (selectedPelanggan == null) {
+        JOptionPane.showMessageDialog(this,
+            "Pilih data pelanggan yang akan dinonaktifkan!",
+            "Peringatan",
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    int konfirmasi = JOptionPane.showConfirmDialog(this,
+        "⚠️ PERHATIAN - NON-AKTIFKAN PELANGGAN\n\n" +
+        "Anda akan menonaktifkan pelanggan:\n" +
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+        "Kode     : " + selectedPelanggan.getKodePelanggan() + "\n" +
+        "Nama     : " + selectedPelanggan.getNamaLengkap() + "\n" +
+        "No Telp  : " + selectedPelanggan.getNoTelepon() + "\n" +
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
+        "📌 Data pelanggan TIDAK AKAN DIHAPUS dari database.\n" +
+        "📌 Status akan diubah menjadi 'Deleted'.\n" +
+        "📌 History transaksi tetap tersimpan.\n\n" +
+        "Yakin ingin melanjutkan?",
+        "Konfirmasi Non-Aktifkan Pelanggan",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE);
+    
+    if (konfirmasi == JOptionPane.YES_OPTION) {
+        String currentUser = "admin"; // Ganti dengan session user
+        
+        boolean success = pelangganDAO.softDelete(
+            selectedPelanggan.getKodePelanggan(), 
+            currentUser
+        );
+        
+        if (success) {
+            loadDataToTable();
             JOptionPane.showMessageDialog(this,
-                "Pilih data di tabel yang akan dihapus!",
-                "Peringatan",
-                JOptionPane.WARNING_MESSAGE);
-            return;
+                "✅ Pelanggan berhasil dinonaktifkan!\n\n" +
+                "Data tetap tersimpan di database untuk audit trail.",
+                "Sukses",
+                JOptionPane.INFORMATION_MESSAGE);
+            clearForm();
         }
-        
-        int konfirmasi = JOptionPane.showConfirmDialog(this,
-            "Yakin ingin menghapus pelanggan:\n" +
-            selectedPelanggan.getNamaLengkap() + " (" + selectedPelanggan.getKodePelanggan() + ")?",
-            "Konfirmasi Hapus",
-            JOptionPane.YES_NO_OPTION);
-        
-        if (konfirmasi == JOptionPane.YES_OPTION) {
-            boolean success = pelangganDAO.delete(selectedPelanggan.getKodePelanggan());
-            
-            if (success) {
-                loadDataToTable();
-                JOptionPane.showMessageDialog(this,
-                    "Data pelanggan berhasil dihapus!",
-                    "Sukses",
-                    JOptionPane.INFORMATION_MESSAGE);
-                clearForm();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                    "Gagal menghapus data pelanggan!",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            }
-        }
+    }
         
 // TODO add your handling code here:
     }//GEN-LAST:event_btnHapusActionPerformed
@@ -881,6 +981,59 @@ public class FormPelanggan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_tipe_membershipActionPerformed
 
+    private void btnRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestoreActionPerformed
+    // Ambil list pelanggan yang deleted
+    List<Pelanggan> deletedPelanggan = pelangganDAO.getDeletedOnly();
+    
+    if (deletedPelanggan.isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+            "✅ Tidak ada pelanggan yang dinonaktifkan.",
+            "Info",
+            JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
+    
+    // Buat array untuk JComboBox/JList
+    String[] options = deletedPelanggan.stream()
+        .map(p -> p.getKodePelanggan() + " - " + p.getNamaLengkap() + 
+                 " (" + p.getNoTelepon() + ")")
+        .toArray(String[]::new);
+    
+    String selected = (String) JOptionPane.showInputDialog(
+        this,
+        "Pilih pelanggan yang akan dikembalikan:\n" +
+        "(Total: " + deletedPelanggan.size() + " pelanggan dinonaktifkan)",
+        "Restore Pelanggan",
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[0]
+    );
+    
+    if (selected != null) {
+        String kodePelanggan = selected.split(" - ")[0];
+        
+        int konfirmasi = JOptionPane.showConfirmDialog(this,
+            "Kembalikan pelanggan:\n" + selected + "\n\nke status Aktif?",
+            "Konfirmasi Restore",
+            JOptionPane.YES_NO_OPTION);
+        
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            boolean success = pelangganDAO.restore(kodePelanggan);
+            
+            if (success) {
+                loadDataToTable();
+                JOptionPane.showMessageDialog(this,
+                    "✅ Pelanggan berhasil dikembalikan ke status Aktif!",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnRestoreActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Nama;
     private javax.swing.JTextField alamat;
@@ -889,6 +1042,7 @@ public class FormPelanggan extends javax.swing.JPanel {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnRestore;
     private javax.swing.JButton btnTambah;
     private javax.swing.JButton btnViewMember;
     private javax.swing.JButton btnViewNormal;

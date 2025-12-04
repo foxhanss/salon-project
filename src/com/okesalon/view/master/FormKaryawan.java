@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author T480
@@ -45,6 +46,7 @@ public class FormKaryawan extends javax.swing.JPanel {
         karyawanDAO = new KaryawanDAO();
         initTable();
         setupDynamicSpesialisasi();
+        setupStatusRenderer();
         loadDataToTable();
     }
 
@@ -342,9 +344,8 @@ public class FormKaryawan extends javax.swing.JPanel {
                                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                     .addComponent(no_telp, javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(email, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(spesialisasi, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jabatan, javax.swing.GroupLayout.Alignment.LEADING, 0, 200, Short.MAX_VALUE)))
+                                                    .addComponent(spesialisasi, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(jabatan, javax.swing.GroupLayout.Alignment.LEADING, 0, 200, Short.MAX_VALUE))
                                                 .addGap(0, 61, Short.MAX_VALUE))))
                                     .addComponent(jLabel38)
                                     .addComponent(jLabel29))
@@ -555,6 +556,35 @@ private void setupDynamicSpesialisasi() {
                 break;
         }
     }
+    
+    private void setupStatusRenderer() {
+    tabel_karyawan.getColumnModel().getColumn(8).setCellRenderer(
+        new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                
+                Component cell = super.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+                
+                String status = (String) value;
+                
+                if (!isSelected) {
+                    if ("Aktif".equals(status)) {
+                        cell.setBackground(new Color(220, 255, 220));  // Hijau muda
+                        cell.setForeground(new Color(0, 128, 0));      // Hijau tua
+                    } else if ("Resign".equals(status)) {
+                        cell.setBackground(new Color(255, 220, 220));  // Merah muda
+                            cell.setForeground(new Color(200, 0, 0));
+                    }
+                }
+                
+                setHorizontalAlignment(SwingConstants.CENTER);
+                return cell;
+            }
+        }
+    );
+}
 
     
     
