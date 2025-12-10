@@ -51,6 +51,8 @@ public class LaporanStok extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 25)); // NOI18N
         jLabel3.setText("Laporan Stok");
 
+        jPanel13.setBackground(new java.awt.Color(255, 102, 204));
+
         jLabel10.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel10.setText("Laporan Produk");
 
@@ -66,10 +68,12 @@ public class LaporanStok extends javax.swing.JPanel {
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel10)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel14.setBackground(new java.awt.Color(255, 102, 204));
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel11.setText("Penjualan Produk");
@@ -86,10 +90,12 @@ public class LaporanStok extends javax.swing.JPanel {
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel11)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel15.setBackground(new java.awt.Color(255, 102, 204));
 
         jLabel12.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel12.setText("Pembelian Dari Supplier");
@@ -106,10 +112,12 @@ public class LaporanStok extends javax.swing.JPanel {
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel12)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel16.setBackground(new java.awt.Color(255, 102, 204));
 
         jLabel13.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel13.setText("Laporan Produk Alert");
@@ -126,7 +134,7 @@ public class LaporanStok extends javax.swing.JPanel {
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

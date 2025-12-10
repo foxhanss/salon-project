@@ -49,6 +49,8 @@ public class LaporanCustomer extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 25)); // NOI18N
         jLabel3.setText("Laporan Customer");
 
+        jPanel7.setBackground(new java.awt.Color(255, 102, 204));
+
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel4.setText("Pelanggan Setia");
 
@@ -66,8 +68,10 @@ public class LaporanCustomer extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel8.setBackground(new java.awt.Color(255, 102, 204));
 
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel5.setText("Pelanggan Baru");
@@ -84,10 +88,12 @@ public class LaporanCustomer extends javax.swing.JPanel {
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel9.setBackground(new java.awt.Color(255, 102, 204));
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel6.setText("Pelanggan Nonaktif");
@@ -104,7 +110,7 @@ public class LaporanCustomer extends javax.swing.JPanel {
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

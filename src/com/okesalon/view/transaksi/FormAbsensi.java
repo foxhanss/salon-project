@@ -4,18 +4,60 @@
  * and open the template in the editor.
  */
 package com.okesalon.view.transaksi;
+import com.okesalon.dao.AbsensiDAO;
+import com.okesalon.dao.KaryawanDAO;
+import com.okesalon.model.Absensi;
+import com.okesalon.model.Karyawan;
 
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import com.toedter.calendar.JDateChooser;
+import java.text.ParseException;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 /**
  *
  * @author T480
  */
 public class FormAbsensi extends javax.swing.JPanel {
-
+    
+    private AbsensiDAO absensiDAO;
+    private KaryawanDAO karyawanDAO;
+    
+    // Table
+    private DefaultTableModel tableModel;
+    
+    // Selected Data
+    private Karyawan selectedKaryawan = null;
+    private Absensi selectedAbsensi = null;
+    private String selectedFotoPath = null;
+    
     /**
      * Creates new form FormAbsensi
      */
     public FormAbsensi() {
+        absensiDAO = new AbsensiDAO();
+        karyawanDAO = new KaryawanDAO();
+        
         initComponents();
+        initTable();
+        setupComboBoxes();
+        setupStatusRenderer();
+        
+        // Load Data
+        loadKaryawanToComboBox();
+        loadDataToTable();
+        setupStatusKehadiranListener();
     }
 
     /**
@@ -32,34 +74,47 @@ public class FormAbsensi extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabel_absensi = new javax.swing.JTable();
+        txtCari = new javax.swing.JTextField();
+        btnCari = new javax.swing.JButton();
+        btnView = new javax.swing.JButton();
+        btnTambah = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        status = new javax.swing.JComboBox<>();
+        kode_karyawan = new javax.swing.JTextField();
+        nama_karyawan = new javax.swing.JComboBox<>();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tanggal = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        total_jam = new javax.swing.JTextField();
+        jam_masuk = new javax.swing.JButton();
+        jam_keluar = new javax.swing.JButton();
+        txtjam_keluar = new javax.swing.JTextField();
+        txtjam_masuk = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        lokasi = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jTextField10 = new javax.swing.JTextField();
-        btnCari = new javax.swing.JButton();
-        btnView = new javax.swing.JButton();
-        btnSimpan = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
-        btnHapus = new javax.swing.JButton();
+        path_file = new javax.swing.JTextField();
+        btnUpload = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        btnHapus1 = new javax.swing.JButton();
+        keterangan = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
 
         setLayout(new java.awt.CardLayout());
 
@@ -79,7 +134,7 @@ public class FormAbsensi extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jLabel3)
-                .addContainerGap(1483, Short.MAX_VALUE))
+                .addContainerGap(1401, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,43 +150,8 @@ public class FormAbsensi extends javax.swing.JPanel {
 
         jPanel4.setBackground(new java.awt.Color(255, 153, 255));
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel2.setText("Tanggal Absensi");
-
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel5.setText("Nama Karyawan");
-
-        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel6.setText("Jam Masuk");
-
-        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel7.setText("Jam Keluar");
-
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel8.setText("Total Jam Kerja");
-
-        jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel9.setText("Status Kehadiran");
-
-        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel10.setText("Keterangan");
-
-        jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel11.setText("Lokasi Check-in");
-
-        jLabel12.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel12.setText("Foto Selfie Absensi");
-
-        jComboBox1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hadir", "Iziin", "Sakit", "Alpha", "Cuti" }));
-
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
-            }
-        });
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabel_absensi.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        tabel_absensi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -150,37 +170,383 @@ public class FormAbsensi extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        tabel_absensi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabel_absensiMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabel_absensi);
 
-        jTextField10.setFont(new java.awt.Font("Times New Roman", 1, 11)); // NOI18N
+        txtCari.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
         btnCari.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnCari.setText("CARI");
         btnCari.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCariActionPerformed(evt);
+            }
+        });
 
         btnView.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnView.setText("View");
         btnView.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        btnSimpan.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        btnSimpan.setText("TAMBAH");
-        btnSimpan.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnTambah.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnTambah.setText("TAMBAH");
+        btnTambah.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnTambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahActionPerformed(evt);
+            }
+        });
 
-        btnEdit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        btnEdit.setText("CLEAR");
+        btnClear.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnClear.setText("CLEAR");
+        btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnEdit.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnEdit.setLabel("EDIT");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
-        btnHapus.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnHapus.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnHapus.setText("HAPUS");
         btnHapus.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnHapus.setLabel("EDIT");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
+        jPanel5.setBackground(new java.awt.Color(255, 220, 255));
 
-        btnHapus1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        btnHapus1.setText("HAPUS");
-        btnHapus1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel6.setBackground(new java.awt.Color(255, 102, 204));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("DATA KARYAWAN");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel5.setText("Nama Karyawan");
+
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel9.setText("Status Kehadiran");
+
+        status.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hadir", "Iziin", "Sakit", "Alpha", "Cuti" }));
+        status.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        kode_karyawan.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        nama_karyawan.setEditable(true);
+        nama_karyawan.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        nama_karyawan.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        nama_karyawan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nama_karyawanActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel9))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(nama_karyawan, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(kode_karyawan, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(kode_karyawan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nama_karyawan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addGap(0, 18, Short.MAX_VALUE))
+        );
+
+        jPanel7.setBackground(new java.awt.Color(255, 220, 255));
+        jPanel7.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        jPanel8.setBackground(new java.awt.Color(255, 102, 204));
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("WAKTU ABSENSI");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel13)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel13)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel2.setText("Tanggal Absensi");
+
+        tanggal.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel6.setText("Jam Masuk");
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel7.setText("Jam Keluar");
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel8.setText("Total Jam Kerja");
+
+        total_jam.setEditable(false);
+        total_jam.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        total_jam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                total_jamActionPerformed(evt);
+            }
+        });
+
+        jam_masuk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jam_masuk.setText("Set Time");
+        jam_masuk.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jam_masuk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jam_masukActionPerformed(evt);
+            }
+        });
+
+        jam_keluar.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jam_keluar.setText("Set Time");
+        jam_keluar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jam_keluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jam_keluarActionPerformed(evt);
+            }
+        });
+
+        txtjam_keluar.setEditable(false);
+        txtjam_keluar.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtjam_keluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtjam_keluarActionPerformed(evt);
+            }
+        });
+
+        txtjam_masuk.setEditable(false);
+        txtjam_masuk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtjam_masuk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtjam_masukActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addGap(71, 71, 71)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(total_jam)
+                            .addComponent(tanggal, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addComponent(txtjam_keluar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jam_keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(72, 72, 72))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(txtjam_masuk, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jam_masuk, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66))))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(tanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jam_masuk, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtjam_masuk, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jam_keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtjam_keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(total_jam, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel9.setBackground(new java.awt.Color(255, 220, 255));
+
+        jPanel10.setBackground(new java.awt.Color(255, 102, 204));
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("DETAIL KEHADIRAN");
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel14)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel14)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel11.setText("Lokasi Check-in");
+
+        lokasi.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        lokasi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lokasiActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel12.setText("Foto Selfie Absensi");
+
+        path_file.setEditable(false);
+        path_file.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        btnUpload.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnUpload.setText("Upload");
+        btnUpload.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadActionPerformed(evt);
+            }
+        });
+
+        keterangan.setColumns(20);
+        keterangan.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        keterangan.setRows(5);
+        jScrollPane3.setViewportView(keterangan);
+
+        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel10.setText("Keterangan");
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel11))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lokasi, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                            .addComponent(path_file))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(89, 89, 89)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)))
+                .addContainerGap(70, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(lokasi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(btnUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(path_file, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -189,133 +555,60 @@ public class FormAbsensi extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1024, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(btnHapus1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 534, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(33, 33, 33)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(114, 114, 114)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(34, 34, 34)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField6)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(94, 94, 94)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel10))
-                                .addGap(44, 44, 44))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(31, 31, 31))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addGap(51, 51, 51)))
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4Layout.createSequentialGroup()
+                                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1400, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(352, 352, 352)
-                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
-                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(593, 593, 593)
+                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(340, 340, 340)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel9))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(77, 77, 77)
-                                .addComponent(jLabel11)
-                                .addGap(28, 28, 28)
-                                .addComponent(jLabel12))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
+                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnView, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapus1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(480, Short.MAX_VALUE))
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(398, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -333,45 +626,921 @@ public class FormAbsensi extends javax.swing.JPanel {
 
         add(jPanel1, "card2");
     }// </editor-fold>//GEN-END:initComponents
+    
+    // ==================== INISIALISASI ====================
+    
+    /**
+ * Setup listener untuk status kehadiran
+ */
+    private void setupStatusKehadiranListener() {
+        status.addActionListener(e -> onStatusKehadiranChanged());
+    }
+    
+    /**
+ * Event ketika status kehadiran berubah
+ */
+private void onStatusKehadiranChanged() {
+    String Status = (String) status.getSelectedItem();
+    
+    if ("Hadir".equals(Status)) {
+        // Jika Hadir → Enable input waktu
+        tanggal.setEnabled(true);
+        txtjam_masuk.setEnabled(true);
+        txtjam_keluar.setEnabled(true);
+        total_jam.setEnabled(true);
+        jam_masuk.setEnabled(true);
+        jam_keluar.setEnabled(true);
+        lokasi.setEnabled(true);
+        btnUpload.setEnabled(true);
+        // ⭐ OPSIONAL: Clear field jika sebelumnya isi default
+        if ("00:00:00".equals(jam_masuk.getText())) {
+            jam_masuk.setText("");
+        }
+        if ("00:00:00".equals(jam_keluar.getText())) {
+            jam_keluar.setText("");
+        }
+        if ("0 jam 0 menit".equals(total_jam.getText())) {
+            total_jam.setText("");
+        }
+        if ("-".equals(lokasi.getText())) {
+            lokasi.setText("");
+        }
+        
+    } else {
+        // Jika Izin/Sakit/Alfa/Cuti → Disable & Clear input waktu
+        tanggal.setEnabled(true); // Tanggal tetap diisi (tanggal izin/sakit)
+        txtjam_masuk.setEnabled(false);
+        txtjam_keluar.setEnabled(false);
+        total_jam.setEnabled(false);
+        jam_masuk.setEnabled(false);
+        jam_keluar.setEnabled(false);
+        lokasi.setEnabled(false);
+        btnUpload.setEnabled(false);
+        
+        // Clear waktu (set default 00:00:00)
+        txtjam_masuk.setText("00:00:00");
+        txtjam_keluar.setText("00:00:00");
+        total_jam.setText("0 jam 0 menit");
+        lokasi.setText("-");
+        path_file.setText("");
+        selectedFotoPath = null;
+    }
+}
+    
+    /**
+     * Setup ComboBox dengan data
+     */
+    private void setupComboBoxes() {
+        // ComboBox Status Kehadiran
+        status.removeAllItems();
+        status.addItem("Hadir");
+        status.addItem("Izin");
+        status.addItem("Sakit");
+        status.addItem("Alfa");
+        status.addItem("Cuti");
+    }
+    
+    /**
+     * Inisialisasi struktur tabel
+     */
+    private void initTable() {
+        String[] kolom = {
+            "Nama Karyawan",
+            "Jam Masuk",
+            "Jam Keluar",
+            "Total Jam Kerja",
+            "Tanggal Absensi",
+            "Status Kehadiran",
+            "Keterangan"
+        };
+        
+        tableModel = new DefaultTableModel(kolom, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        tabel_absensi.setModel(tableModel);
+        tabel_absensi.setRowHeight(25);
+        tabel_absensi.getTableHeader().setReorderingAllowed(false);
+        
+        // Atur lebar kolom
+        tabel_absensi.getColumnModel().getColumn(0).setPreferredWidth(150);
+        tabel_absensi.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tabel_absensi.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tabel_absensi.getColumnModel().getColumn(3).setPreferredWidth(120);
+        tabel_absensi.getColumnModel().getColumn(4).setPreferredWidth(120);
+        tabel_absensi.getColumnModel().getColumn(5).setPreferredWidth(100);
+        tabel_absensi.getColumnModel().getColumn(6).setPreferredWidth(200);
+    }
+    
+    /**
+     * Setup renderer untuk kolom Status Kehadiran
+     */
+    private void setupStatusRenderer() {
+        tabel_absensi.getColumnModel().getColumn(5).setCellRenderer(
+            new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value,
+                        boolean isSelected, boolean hasFocus, int row, int column) {
+                    
+                    Component cell = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+                    
+                    String status = (String) value;
+                    
+                    if (!isSelected) {
+                        if ("Hadir".equals(status)) {
+                            cell.setBackground(new Color(220, 255, 220));
+                            cell.setForeground(new Color(0, 128, 0));
+                        } else if ("Izin".equals(status)) {
+                            cell.setBackground(new Color(220, 220, 255));
+                            cell.setForeground(new Color(0, 0, 200));
+                        } else if ("Sakit".equals(status)) {
+                            cell.setBackground(new Color(255, 255, 200));
+                            cell.setForeground(new Color(200, 150, 0));
+                        } else if ("Alfa".equals(status)) {
+                            cell.setBackground(new Color(255, 220, 220));
+                            cell.setForeground(new Color(200, 0, 0));
+                        } else if ("Cuti".equals(status)) {
+                            cell.setBackground(new Color(240, 230, 255));
+                            cell.setForeground(new Color(128, 0, 128));
+                        }
+                    }
+                    
+                    setHorizontalAlignment(SwingConstants.CENTER);
+                    return cell;
+                }
+            }
+        );
+    }
+    
+    /**
+     * Load data karyawan ke ComboBox
+     */
+    private void loadKaryawanToComboBox() {
+        nama_karyawan.removeAllItems();
+        nama_karyawan.addItem("-- Pilih Karyawan --");
+        
+        List<Karyawan> dataKaryawan = karyawanDAO.getAll();
+        for (Karyawan k : dataKaryawan) {
+            nama_karyawan.addItem(k.getNamaLengkap());
+        }
+    }
+    
+    /**
+     * Load data dari database ke tabel
+     */
+    private void loadDataToTable() {
+        tableModel.setRowCount(0);
+        
+        List<Absensi> dataAbsensi = absensiDAO.getAll();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        
+        for (Absensi a : dataAbsensi) {
+            Object[] row = {
+                a.getNamaKaryawan(),
+                timeFormat.format(a.getJamMasuk()),
+                timeFormat.format(a.getJamKeluar()),
+                a.getTotalJamKerja(),
+                dateFormat.format(a.getTanggalAbsensi()),
+                a.getStatusKehadiran(),
+                a.getKeterangan()
+            };
+            tableModel.addRow(row);
+        }
+        
+        txtCari.setText("");
+    }
+    
+    // ==================== HELPER METHODS ====================
+    
+    /**
+     * Hitung total jam kerja
+     */
+    private void hitungTotalJam() {
+        String jamMasukText = txtjam_masuk.getText().trim();
+        String jamKeluarText = txtjam_keluar.getText().trim();
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+        // Validasi: Pastikan kedua field tidak kosong
+        if (jamMasukText.isEmpty() || jamKeluarText.isEmpty()) {
+            total_jam.setText("");
+            return;
+        }
+
+        // Validasi: Pastikan bukan default 00:00:00
+        if ("00:00:00".equals(jamMasukText) || "00:00:00".equals(jamKeluarText)) {
+            total_jam.setText("0 jam 0 menit");
+            return;
+        }
+
+        try {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+            timeFormat.setLenient(false);
+
+            Date jamMasuk = timeFormat.parse(jamMasukText);
+            Date jamKeluar = timeFormat.parse(jamKeluarText);
+
+            // Hitung selisih waktu dalam milliseconds
+            long diff = jamKeluar.getTime() - jamMasuk.getTime();
+
+            // ⭐ Handle kasus jam keluar < jam masuk (misal: shift malam)
+            if (diff < 0) {
+                // Tambah 24 jam
+                diff += (24 * 60 * 60 * 1000);
+            }
+
+            // Convert ke jam dan menit
+            long hours = diff / (60 * 60 * 1000);
+            long minutes = (diff % (60 * 60 * 1000)) / (60 * 1000);
+
+            // Set hasil ke textfield
+            total_jam.setText(hours + " jam " + minutes + " menit");
+
+        } catch (ParseException e) {
+            System.err.println("Error parsing time: " + e.getMessage());
+            total_jam.setText("Format waktu salah!");
+        } catch (Exception e) {
+            System.err.println("Error menghitung total jam: " + e.getMessage());
+            total_jam.setText("Error!");
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Helper: Get file extension
+     */
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1).toLowerCase();
+        }
+        return "";
+    }
+    
+    /**
+     * Ambil data dari form → objek Absensi
+     */
+    private Absensi getAbsensiFromForm() throws Exception {
+        // Validasi
+        if (selectedKaryawan == null) {
+            throw new Exception("Pilih karyawan terlebih dahulu!");
+        }
+        
+        if (jam_masuk.getText().trim().isEmpty()) {
+            throw new Exception("Jam Masuk harus diisi!");
+        }
+        
+        if (jam_keluar.getText().trim().isEmpty()) {
+            throw new Exception("Jam Keluar harus diisi!");
+        }
+        
+        Date tanggalAbsensi = tanggal.getDate();
+        if (tanggalAbsensi == null) {
+            throw new Exception("Tanggal Absensi harus diisi!");
+        }
+        
+        // Check duplikat (hanya untuk insert baru)
+        if (selectedAbsensi == null && 
+            absensiDAO.isAlreadyCheckedIn(selectedKaryawan.getKodeKaryawan(), tanggalAbsensi)) {
+            throw new Exception("Karyawan sudah absen pada tanggal ini!");
+        }
+        
+        // Parse jam
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        Date jamMasuk = timeFormat.parse(jam_masuk.getText());
+        Date jamKeluar = timeFormat.parse(jam_keluar.getText());
+        
+        // Buat objek
+        Absensi absensi = new Absensi();
+        
+        // Set kode (generate jika baru, keep jika edit)
+        if (selectedAbsensi == null) {
+            String kodeAbsensi = absensiDAO.generateKodeAbsensi();
+            absensi.setKodeAbsensi(kodeAbsensi);
+        } else {
+            absensi.setKodeAbsensi(selectedAbsensi.getKodeAbsensi());
+        }
+        
+        absensi.setKodeKaryawan(selectedKaryawan.getKodeKaryawan());
+        absensi.setNamaKaryawan(selectedKaryawan.getNamaLengkap());
+        absensi.setTanggalAbsensi(tanggalAbsensi);
+        absensi.setJamMasuk(jamMasuk);
+        absensi.setJamKeluar(jamKeluar);
+        absensi.setTotalJamKerja(total_jam.getText());
+        absensi.setStatusKehadiran(status.getSelectedItem().toString());
+        absensi.setLokasiCheckIn(lokasi.getText());
+        absensi.setFotoSelfie(selectedFotoPath);
+        absensi.setKeterangan(keterangan.getText());
+        
+        return absensi;
+    }
+    
+    /**
+     * Fill form dari objek Absensi
+     */
+    private void fillFormFromAbsensi(Absensi a) {
+        nama_karyawan.setSelectedItem(a.getNamaKaryawan());
+        kode_karyawan.setText(a.getKodeKaryawan());
+        tanggal.setDate(a.getTanggalAbsensi());
+        
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        jam_masuk.setText(timeFormat.format(a.getJamMasuk()));
+        jam_keluar.setText(timeFormat.format(a.getJamKeluar()));
+        total_jam.setText(a.getTotalJamKerja());
+        
+        status.setSelectedItem(a.getStatusKehadiran());
+        lokasi.setText(a.getLokasiCheckIn());
+        keterangan.setText(a.getKeterangan());
+        
+        selectedFotoPath = a.getFotoSelfie();
+        if (selectedFotoPath != null && !selectedFotoPath.isEmpty()) {
+            File fotoFile = new File(selectedFotoPath);
+            path_file.setText(fotoFile.getName());
+        } else {
+            path_file.setText("");
+        }
+    }
+    
+    private boolean isValidTimeFormat(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            sdf.setLenient(false);
+            sdf.parse(time);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    private String showTimePickerDialog(String title, String currentTime) {
+         // Parse current time atau pakai default
+    int defaultHour = 8;
+    int defaultMinute = 0;
+    int defaultSecond = 0;
+    
+    if (currentTime != null && !currentTime.isEmpty() && !currentTime.equals("00:00:00")) {
+        try {
+            String[] parts = currentTime.split(":");
+            defaultHour = Integer.parseInt(parts[0]);
+            defaultMinute = Integer.parseInt(parts[1]);
+            defaultSecond = Integer.parseInt(parts[2]);
+        } catch (Exception e) {
+            // Keep default values
+        }
+    }
+    
+    // Create dialog
+    JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), title, true);
+    dialog.setLayout(new BorderLayout(0, 0));
+    dialog.setSize(500, 300);
+    dialog.setLocationRelativeTo(this);
+    dialog.setResizable(false);
+    
+    // ==================== HEADER PANEL ====================
+    JPanel headerPanel = new JPanel(new BorderLayout());
+    headerPanel.setBackground(new Color(255, 105, 180));
+    headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 25, 20, 25));
+    
+    JLabel lblTitle = new JLabel(title);
+    lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
+    lblTitle.setForeground(Color.WHITE);
+    
+    JLabel lblSubtitle = new JLabel("Pilih waktu dengan spinner atau klik 'Sekarang'");
+    lblSubtitle.setFont(new Font("Arial", Font.PLAIN, 12));
+    lblSubtitle.setForeground(new Color(255, 240, 245));
+    
+    JPanel titlePanel = new JPanel(new BorderLayout(0, 5));
+    titlePanel.setOpaque(false);
+    titlePanel.add(lblTitle, BorderLayout.NORTH);
+    titlePanel.add(lblSubtitle, BorderLayout.CENTER);
+    
+    headerPanel.add(titlePanel, BorderLayout.WEST);
+    
+    // ==================== SPINNER PANEL ====================
+    JPanel centerPanel = new JPanel(new GridBagLayout());
+    centerPanel.setBackground(new Color(255, 240, 245));
+    centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(5, 5, 5, 5);
+    
+    // Spinner Jam (0-23)
+    SpinnerNumberModel hourModel = new SpinnerNumberModel(defaultHour, 0, 23, 1);
+    JSpinner spinnerJam = new JSpinner(hourModel);
+    spinnerJam.setFont(new Font("Arial", Font.BOLD, 36));
+    spinnerJam.setPreferredSize(new Dimension(90, 60));
+    ((JSpinner.DefaultEditor) spinnerJam.getEditor()).getTextField().setHorizontalAlignment(JTextField.CENTER);
+    spinnerJam.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(255, 105, 180), 2, true),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+    // Spinner Menit (0-59)
+    SpinnerNumberModel minuteModel = new SpinnerNumberModel(defaultMinute, 0, 59, 1);
+    JSpinner spinnerMenit = new JSpinner(minuteModel);
+    spinnerMenit.setFont(new Font("Arial", Font.BOLD, 36));
+    spinnerMenit.setPreferredSize(new Dimension(90, 60));
+    ((JSpinner.DefaultEditor) spinnerMenit.getEditor()).getTextField().setHorizontalAlignment(JTextField.CENTER);
+    spinnerMenit.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(255, 105, 180), 2, true),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+    // Spinner Detik (0-59)
+    SpinnerNumberModel secondModel = new SpinnerNumberModel(defaultSecond, 0, 59, 1);
+    JSpinner spinnerDetik = new JSpinner(secondModel);
+    spinnerDetik.setFont(new Font("Arial", Font.BOLD, 36));
+    spinnerDetik.setPreferredSize(new Dimension(90, 60));
+    ((JSpinner.DefaultEditor) spinnerDetik.getEditor()).getTextField().setHorizontalAlignment(JTextField.CENTER);
+    spinnerDetik.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(255, 105, 180), 2, true),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)
+    ));
+    
+    // Label pemisah ":"
+    JLabel lblColon1 = new JLabel(":");
+    lblColon1.setFont(new Font("Arial", Font.BOLD, 40));
+    lblColon1.setForeground(new Color(255, 105, 180));
+    
+    JLabel lblColon2 = new JLabel(":");
+    lblColon2.setFont(new Font("Arial", Font.BOLD, 40));
+    lblColon2.setForeground(new Color(255, 105, 180));
+    
+    // Row 1: Spinners dengan label
+    gbc.gridx = 0; gbc.gridy = 0;
+    centerPanel.add(spinnerJam, gbc);
+    
+    gbc.gridx = 1;
+    centerPanel.add(lblColon1, gbc);
+    
+    gbc.gridx = 2;
+    centerPanel.add(spinnerMenit, gbc);
+    
+    gbc.gridx = 3;
+    centerPanel.add(lblColon2, gbc);
+    
+    gbc.gridx = 4;
+    centerPanel.add(spinnerDetik, gbc);
+    
+    // Row 2: Label keterangan
+    JLabel lblJam = new JLabel("Jam", SwingConstants.CENTER);
+    lblJam.setFont(new Font("Arial", Font.BOLD, 12));
+    lblJam.setForeground(new Color(100, 100, 100));
+    
+    JLabel lblMenit = new JLabel("Menit", SwingConstants.CENTER);
+    lblMenit.setFont(new Font("Arial", Font.BOLD, 12));
+    lblMenit.setForeground(new Color(100, 100, 100));
+    
+    JLabel lblDetik = new JLabel("Detik", SwingConstants.CENTER);
+    lblDetik.setFont(new Font("Arial", Font.BOLD, 12));
+    lblDetik.setForeground(new Color(100, 100, 100));
+    
+    gbc.gridy = 1;
+    
+    gbc.gridx = 0;
+    centerPanel.add(lblJam, gbc);
+    
+    gbc.gridx = 2;
+    centerPanel.add(lblMenit, gbc);
+    
+    gbc.gridx = 4;
+    centerPanel.add(lblDetik, gbc);
+    
+    // ==================== BUTTON PANEL ====================
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 18));
+    buttonPanel.setBackground(new Color(255, 240, 245));
+    buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+    
+    final String[] selectedTime = {null};
+    
+    // Button "⏰ Waktu Sekarang"
+    JButton btnNow = new JButton("Waktu Sekarang");
+    btnNow.setFont(new Font("Arial", Font.BOLD, 13));
+    btnNow.setBackground(new Color(173, 216, 230));
+    btnNow.setForeground(Color.BLACK);
+    btnNow.setPreferredSize(new Dimension(165, 40));
+    btnNow.setFocusPainted(false);
+    btnNow.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(100, 149, 237), 2),
+        BorderFactory.createEmptyBorder(8, 15, 8, 15)
+    ));
+    btnNow.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btnNow.addActionListener(e -> {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        spinnerJam.setValue(cal.get(java.util.Calendar.HOUR_OF_DAY));
+        spinnerMenit.setValue(cal.get(java.util.Calendar.MINUTE));
+        spinnerDetik.setValue(cal.get(java.util.Calendar.SECOND));
+    });
+    
+    // Button "✓ OK"
+    JButton btnOK = new JButton("OK");
+    btnOK.setFont(new Font("Arial", Font.BOLD, 14));
+    btnOK.setBackground(new Color(144, 238, 144));
+    btnOK.setForeground(Color.BLACK);
+    btnOK.setPreferredSize(new Dimension(110, 40));
+    btnOK.setFocusPainted(false);
+    btnOK.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(34, 139, 34), 2),
+        BorderFactory.createEmptyBorder(8, 20, 8, 20)
+    ));
+    btnOK.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btnOK.addActionListener(e -> {
+        int jam = (Integer) spinnerJam.getValue();
+        int menit = (Integer) spinnerMenit.getValue();
+        int detik = (Integer) spinnerDetik.getValue();
+        
+        selectedTime[0] = String.format("%02d:%02d:%02d", jam, menit, detik);
+        dialog.dispose();
+    });
+    
+    // Button "✕ Cancel"
+    JButton btnCancel = new JButton("Cancel");
+    btnCancel.setFont(new Font("Arial", Font.BOLD, 14));
+    btnCancel.setBackground(new Color(255, 182, 193));
+    btnCancel.setForeground(Color.BLACK);
+    btnCancel.setPreferredSize(new Dimension(110, 40));
+    btnCancel.setFocusPainted(false);
+    btnCancel.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(new Color(255, 105, 180), 2),
+        BorderFactory.createEmptyBorder(8, 20, 8, 20)
+    ));
+    btnCancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btnCancel.addActionListener(e -> dialog.dispose());
+    
+    buttonPanel.add(btnNow);
+    buttonPanel.add(btnOK);
+    buttonPanel.add(btnCancel);
+    
+    // ==================== ASSEMBLY ====================
+    dialog.add(headerPanel, BorderLayout.NORTH);
+    dialog.add(centerPanel, BorderLayout.CENTER);
+    dialog.add(buttonPanel, BorderLayout.SOUTH);
+    
+    // Keyboard shortcut: ENTER = OK, ESC = Cancel
+    dialog.getRootPane().setDefaultButton(btnOK);
+    dialog.getRootPane().registerKeyboardAction(
+        e -> dialog.dispose(),
+        KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+        JComponent.WHEN_IN_FOCUSED_WINDOW
+    );
+    
+    dialog.setVisible(true);
+    
+    return selectedTime[0];
+    }
+    
+    /**
+     * Reset/clear form
+     */
+    private void clearForm() {
+        nama_karyawan.setSelectedIndex(0);
+        kode_karyawan.setText("");
+        tanggal.setDate(new Date());
+        jam_masuk.setText("Set Time");
+        jam_keluar.setText("Set Time");
+        total_jam.setText("");
+        status.setSelectedIndex(0);
+        lokasi.setText("");
+        path_file.setText("");
+        keterangan.setText("");
+        
+        selectedKaryawan = null;
+        selectedAbsensi = null;
+        selectedFotoPath = null;
+        tabel_absensi.clearSelection();
+        
+        nama_karyawan.requestFocus();
+    }
+
+    
+    private void total_jamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_total_jamActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_total_jamActionPerformed
+
+    private void lokasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lokasiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lokasiActionPerformed
+
+    private void nama_karyawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nama_karyawanActionPerformed
+    String selectedNama = (String) nama_karyawan.getSelectedItem();
+        
+        if (selectedNama == null || selectedNama.equals("-- Pilih Karyawan --")) {
+            kode_karyawan.setText("");
+            selectedKaryawan = null;
+            return;
+        }
+        
+        List<Karyawan> dataKaryawan = karyawanDAO.getAll();
+        for (Karyawan k : dataKaryawan) {
+            if (k.getNamaLengkap().equals(selectedNama)) {
+                selectedKaryawan = k;
+                kode_karyawan.setText(k.getKodeKaryawan());
+                break;
+            }
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_nama_karyawanActionPerformed
+
+    private void tabel_absensiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabel_absensiMouseClicked
+    int row = tabel_absensi.getSelectedRow();
+        if (row == -1) return;
+        
+        String namaKaryawan = tableModel.getValueAt(row, 0).toString();
+        String tanggalStr = tableModel.getValueAt(row, 4).toString();
+        
+        List<Absensi> dataAbsensi = absensiDAO.getAll();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
+        for (Absensi a : dataAbsensi) {
+            String tglAbsensi = dateFormat.format(a.getTanggalAbsensi());
+            if (a.getNamaKaryawan().equals(namaKaryawan) && tglAbsensi.equals(tanggalStr)) {
+                selectedAbsensi = a;
+                fillFormFromAbsensi(a);
+                break;
+            }
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_tabel_absensiMouseClicked
+
+    private void jam_masukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jam_masukActionPerformed
+    String currentTime = txtjam_masuk.getText().trim().isEmpty() ? null : txtjam_masuk.getText();
+    String selectedTime = showTimePickerDialog("Set Jam Masuk", currentTime);
+    
+    if (selectedTime != null) {
+        txtjam_masuk.setText(selectedTime);
+        hitungTotalJam();
+    }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_jam_masukActionPerformed
+
+    private void jam_keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jam_keluarActionPerformed
+    String currentTime = txtjam_keluar.getText().trim().isEmpty() ? null : txtjam_keluar.getText();
+    String selectedTime = showTimePickerDialog("Set Jam Keluar", currentTime);
+    
+    if (selectedTime != null) {
+        txtjam_keluar.setText(selectedTime);
+        hitungTotalJam();
+    }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_jam_keluarActionPerformed
+
+    private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
+    JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Pilih Foto Selfie Absensi");
+        
+        javax.swing.filechooser.FileNameExtensionFilter filter = 
+            new javax.swing.filechooser.FileNameExtensionFilter(
+                "Image Files", "jpg", "jpeg", "png", "gif");
+        fileChooser.setFileFilter(filter);
+        
+        int result = fileChooser.showOpenDialog(this);
+        
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            
+            try {
+                File folderFoto = new File("foto_absensi");
+                if (!folderFoto.exists()) {
+                    folderFoto.mkdir();
+                }
+                
+                String extension = getFileExtension(selectedFile.getName());
+                String newFileName = "foto_" + System.currentTimeMillis() + "." + extension;
+                File destFile = new File(folderFoto, newFileName);
+                
+                Files.copy(selectedFile.toPath(), destFile.toPath(), 
+                          StandardCopyOption.REPLACE_EXISTING);
+                
+                selectedFotoPath = "foto_absensi/" + newFileName;
+                path_file.setText(selectedFile.getName());
+                
+                JOptionPane.showMessageDialog(this,
+                    "Foto berhasil diupload!\nFile: " + selectedFile.getName(),
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                    "Gagal mengupload foto: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnUploadActionPerformed
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+    try {
+            Absensi absensi = getAbsensiFromForm();
+            
+            boolean success = absensiDAO.insert(absensi);
+            
+            if (success) {
+                JOptionPane.showMessageDialog(this,
+                    "✅ Absensi berhasil disimpan!\n\n" +
+                    "Karyawan: " + absensi.getNamaKaryawan() + "\n" +
+                    "Tanggal: " + new SimpleDateFormat("dd/MM/yyyy").format(absensi.getTanggalAbsensi()) + "\n" +
+                    "Status: " + absensi.getStatusKehadiran(),
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                clearForm();
+                loadDataToTable();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "❌ Gagal menyimpan absensi!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+    clearForm();
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+    String keyword = txtCari.getText().trim();
+        
+        if (keyword.isEmpty()) {
+            loadDataToTable();
+            return;
+        }
+        
+        tableModel.setRowCount(0);
+        List<Absensi> dataAbsensi = absensiDAO.search(keyword);
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        
+        for (Absensi a : dataAbsensi) {
+            Object[] row = {
+                a.getNamaKaryawan(),
+                timeFormat.format(a.getJamMasuk()),
+                timeFormat.format(a.getJamKeluar()),
+                a.getTotalJamKerja(),
+                dateFormat.format(a.getTanggalAbsensi()),
+                a.getStatusKehadiran(),
+                a.getKeterangan()
+            };
+            tableModel.addRow(row);
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnCariActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+    if (selectedAbsensi == null) {
+            JOptionPane.showMessageDialog(this,
+                "Pilih data dari tabel terlebih dahulu!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            Absensi absensi = getAbsensiFromForm();
+            
+            boolean success = absensiDAO.update(absensi);
+            
+            if (success) {
+                JOptionPane.showMessageDialog(this,
+                    "✅ Data absensi berhasil diupdate!",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                clearForm();
+                loadDataToTable();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "❌ Gagal mengupdate data!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+    if (selectedAbsensi == null) {
+            JOptionPane.showMessageDialog(this,
+                "Pilih data dari tabel terlebih dahulu!",
+                "Peringatan",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Yakin ingin menghapus absensi:\n" +
+            "Karyawan: " + selectedAbsensi.getNamaKaryawan() + "\n" +
+            "Tanggal: " + new SimpleDateFormat("dd/MM/yyyy").format(selectedAbsensi.getTanggalAbsensi()) + "?",
+            "Konfirmasi Hapus",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            boolean success = absensiDAO.delete(selectedAbsensi.getKodeAbsensi());
+            
+            if (success) {
+                JOptionPane.showMessageDialog(this,
+                    "✅ Data absensi berhasil dihapus!",
+                    "Sukses",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                clearForm();
+                loadDataToTable();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "❌ Gagal menghapus data!",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void txtjam_keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtjam_keluarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtjam_keluarActionPerformed
+
+    private void txtjam_masukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtjam_masukActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtjam_masukActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCari;
+    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
-    private javax.swing.JButton btnHapus1;
-    private javax.swing.JButton btnSimpan;
+    private javax.swing.JButton btnTambah;
+    private javax.swing.JButton btnUpload;
     private javax.swing.JButton btnView;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JButton jam_keluar;
+    private javax.swing.JButton jam_masuk;
+    private javax.swing.JTextArea keterangan;
+    private javax.swing.JTextField kode_karyawan;
+    private javax.swing.JTextField lokasi;
+    private javax.swing.JComboBox<String> nama_karyawan;
+    private javax.swing.JTextField path_file;
+    private javax.swing.JComboBox<String> status;
+    private javax.swing.JTable tabel_absensi;
+    private com.toedter.calendar.JDateChooser tanggal;
+    private javax.swing.JTextField total_jam;
+    private javax.swing.JTextField txtCari;
+    private javax.swing.JTextField txtjam_keluar;
+    private javax.swing.JTextField txtjam_masuk;
     // End of variables declaration//GEN-END:variables
 }

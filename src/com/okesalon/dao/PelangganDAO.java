@@ -339,6 +339,29 @@ public class PelangganDAO {
     }
     
     /**
+    * GET BY NAMA LENGKAP - Method untuk FormTransaksiLayanan
+    * Cari pelanggan berdasarkan nama lengkap (exact match)
+    */
+    public Pelanggan getPelangganByNama(String namaLengkap) {
+        String sql = "SELECT * FROM master_pelanggan WHERE nama_lengkap = ? AND status != 'Deleted'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, namaLengkap);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return extractPelangganFromResultSet(rs);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Error getPelangganByNama: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    /**
      * 12. GET BY MEMBERSHIP TYPE - Filter pelanggan berdasarkan tipe member
      */
     public List<Pelanggan> getByMembershipType(String membershipType) {
@@ -556,4 +579,6 @@ public class PelangganDAO {
         
         return p;
     }
+    
+    
 }

@@ -18,8 +18,8 @@ import com.okesalon.view.master.FormProduk;
 import com.okesalon.view.sistem.FormDashboard;
 import com.okesalon.view.transaksi.FormAbsensi;
 import com.okesalon.view.transaksi.FormTransaksiLayanan;
-import com.okesalon.view.transaksi.FormTransaksiProdukBeli;
-import com.okesalon.view.transaksi.FormTransaksiProdukJual;
+import com.okesalon.view.transaksi.FormTransaksiPembelianProduk;
+import com.okesalon.view.transaksi.FormTransaksiPenjualanProduk;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -564,7 +564,7 @@ public class MainApp extends javax.swing.JFrame {
         jLabel21.setBackground(new java.awt.Color(255, 255, 255));
         jLabel21.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel21.setText("Produk Beli");
+        jLabel21.setText("Pembelian Produk");
 
         javax.swing.GroupLayout pnl_produkbeliLayout = new javax.swing.GroupLayout(pnl_produkbeli);
         pnl_produkbeli.setLayout(pnl_produkbeliLayout);
@@ -613,7 +613,7 @@ public class MainApp extends javax.swing.JFrame {
         jLabel23.setBackground(new java.awt.Color(255, 255, 255));
         jLabel23.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel23.setText("Produk Jual");
+        jLabel23.setText("Penjualan Produk");
 
         javax.swing.GroupLayout pnl_produkjualLayout = new javax.swing.GroupLayout(pnl_produkjual);
         pnl_produkjual.setLayout(pnl_produkjualLayout);
@@ -1241,10 +1241,10 @@ public class MainApp extends javax.swing.JFrame {
             panel_utama.add(new FormAbsensi());
             
         } else if (menuPanel == pnl_produkbeli) {           
-            panel_utama.add(new FormTransaksiProdukBeli());
+            panel_utama.add(new FormTransaksiPembelianProduk());
             
         } else if (menuPanel == pnl_produkjual) {           
-            panel_utama.add(new FormTransaksiProdukJual());
+            panel_utama.add(new FormTransaksiPenjualanProduk());
             
         } else if (menuPanel == pnl_laporankeuangan) {           
             panel_utama.add(new LaporanKeuangan());

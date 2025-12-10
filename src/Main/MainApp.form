@@ -928,7 +928,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="99" green="99" red="99" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Produk Beli"/>
+                        <Property name="text" type="java.lang.String" value="Pembelian Produk"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -1013,7 +1013,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="99" green="99" red="99" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Produk Jual"/>
+                        <Property name="text" type="java.lang.String" value="Penjualan Produk"/>
                       </Properties>
                     </Component>
                   </SubComponents>
