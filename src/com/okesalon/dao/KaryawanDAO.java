@@ -1,28 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.dao;
-import koneksi.koneksi;
+import com.okesalon.util.koneksi;
 import com.okesalon.model.Karyawan;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author T480
- */
+
 public class KaryawanDAO {
     private Connection connection;
     
     public KaryawanDAO() {
         this.connection = koneksi.getConnection();
     }
-    
-    /**
-     * 1. CREATE - Tambah karyawan baru
-     */
+
     public boolean insert(Karyawan karyawan) {
         String sql = "INSERT INTO master_karyawan " +
                      "(kode_karyawan, nik, nama_lengkap, jabatan, spesialisasi, no_telpon, " +
@@ -48,15 +37,12 @@ public class KaryawanDAO {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error insert karyawan: " + e.getMessage());
+            System.err.println("Error insert karyawan: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-    
-    /**
-     * 2. READ - Ambil semua data karyawan
-     */
+
     public List<Karyawan> getAll() {
         List<Karyawan> list = new ArrayList<>();
         String sql = "SELECT * FROM master_karyawan ORDER BY kode_karyawan ASC";
@@ -84,16 +70,14 @@ public class KaryawanDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getAll karyawan: " + e.getMessage());
+            System.err.println("Error getAll karyawan: " + e.getMessage());
             e.printStackTrace();
         }
         
         return list;
     }
     
-    /**
-     * 3. READ - Ambil data karyawan berdasarkan Kode Karyawan
-     */
+
     public Karyawan getByKode(String kodeKaryawan) {
         String sql = "SELECT * FROM master_karyawan WHERE kode_karyawan = ?";
         
@@ -121,16 +105,13 @@ public class KaryawanDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getByKode: " + e.getMessage());
+            System.err.println("Error getByKode: " + e.getMessage());
             e.printStackTrace();
         }
         
         return null;
     }
     
-    /**
-     * 4. UPDATE - Ubah data karyawan
-     */
     public boolean update(Karyawan karyawan) {
         String sql = "UPDATE master_karyawan SET " +
                      "nik = ?, nama_lengkap = ?, jabatan = ?, spesialisasi = ?, no_telpon = ?, " +
@@ -156,15 +137,12 @@ public class KaryawanDAO {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error update karyawan: " + e.getMessage());
+            System.err.println("Error update karyawan: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
     
-    /**
-     * 5. DELETE - Hapus data karyawan
-     */
     public boolean delete(String kodeKaryawan) {
         String sql = "DELETE FROM master_karyawan WHERE kode_karyawan = ?";
         
@@ -173,15 +151,12 @@ public class KaryawanDAO {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error delete karyawan: " + e.getMessage());
+            System.err.println("Error delete karyawan: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-    
-    /**
-     * 6. SEARCH - Cari karyawan berdasarkan keyword
-     */
+
     public List<Karyawan> search(String keyword) {
         List<Karyawan> list = new ArrayList<>();
         String sql = "SELECT * FROM master_karyawan " +
@@ -220,16 +195,13 @@ public class KaryawanDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error search karyawan: " + e.getMessage());
+            System.err.println("Error search karyawan: " + e.getMessage());
             e.printStackTrace();
         }
         
         return list;
     }
-    
-    /**
-     * 7. GENERATE KODE - Generate kode karyawan berikutnya (KRY-001, KRY-002, ...)
-     */
+
     public String generateKodeKaryawan() {
         String sql = "SELECT kode_karyawan FROM master_karyawan " +
                      "ORDER BY kode_karyawan DESC LIMIT 1";
@@ -238,24 +210,21 @@ public class KaryawanDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             
             if (rs.next()) {
-                String lastKode = rs.getString("kode_karyawan"); // misal: KRY-005
-                int lastNumber = Integer.parseInt(lastKode.substring(4)); // ambil "005" → 5
+                String lastKode = rs.getString("kode_karyawan");
+                int lastNumber = Integer.parseInt(lastKode.substring(4));
                 int nextNumber = lastNumber + 1;
-                return String.format("KRY-%03d", nextNumber); // KRY-006
+                return String.format("KRY-%03d", nextNumber);
             } else {
-                return "KRY-001"; // Jika belum ada data
+                return "KRY-001";
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error generate kode: " + e.getMessage());
+            System.err.println("Error generate kode: " + e.getMessage());
             e.printStackTrace();
             return "KRY-001";
         }
     }
-    
-    /**
-     * 8. VALIDASI NIK UNIQUE - Cek apakah NIK sudah ada di database
-     */
+
     public boolean isNIKExists(String nik, String excludeKode) {
         String sql = "SELECT COUNT(*) FROM master_karyawan WHERE nik = ? AND kode_karyawan != ?";
         
@@ -269,7 +238,7 @@ public class KaryawanDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error check NIK: " + e.getMessage());
+            System.err.println("Error check NIK: " + e.getMessage());
             e.printStackTrace();
         }
         

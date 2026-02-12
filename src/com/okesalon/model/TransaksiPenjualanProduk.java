@@ -1,16 +1,9 @@
 package com.okesalon.model;
-
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-/**
- * Model untuk Transaksi Penjualan Produk
- * @author T480
- */
 public class TransaksiPenjualanProduk {
-    
-    // ==================== FIELDS ====================
     private String kodeTransaksi;
     private Date tanggalTransaksi;
     private String kodeProduk;
@@ -28,17 +21,8 @@ public class TransaksiPenjualanProduk {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // ==================== CONSTRUCTORS ====================
-    
-    /**
-     * Constructor kosong
-     */
-    public TransaksiPenjualanProduk() {
-    }
+    public TransaksiPenjualanProduk() {}
 
-    /**
-     * Constructor lengkap
-     */
     public TransaksiPenjualanProduk(String kodeTransaksi, Date tanggalTransaksi, 
                                     String kodeProduk, String namaProduk, 
                                     int jumlahJual, BigDecimal hargaSatuan, 
@@ -61,8 +45,6 @@ public class TransaksiPenjualanProduk {
         this.stokSesudah = stokSesudah;
         this.totalHarga = totalHarga;
     }
-
-    // ==================== GETTERS AND SETTERS ====================
     
     public String getKodeTransaksi() {
         return kodeTransaksi;
@@ -80,7 +62,6 @@ public class TransaksiPenjualanProduk {
         this.tanggalTransaksi = tanggalTransaksi;
     }
     
-    // ✅ OVERLOAD: Accept java.util.Date (dari JDateChooser)
     public void setTanggalTransaksi(java.util.Date tanggalTransaksi) {
         if (tanggalTransaksi != null) {
             this.tanggalTransaksi = new Date(tanggalTransaksi.getTime());
@@ -119,7 +100,6 @@ public class TransaksiPenjualanProduk {
         this.hargaSatuan = hargaSatuan;
     }
     
-    // ✅ OVERLOAD: Accept double (lebih mudah untuk calculation)
     public void setHargaSatuan(double hargaSatuan) {
         this.hargaSatuan = BigDecimal.valueOf(hargaSatuan);
     }
@@ -188,7 +168,6 @@ public class TransaksiPenjualanProduk {
         this.totalHarga = totalHarga;
     }
     
-    // ✅ OVERLOAD: Accept double (untuk kompatibilitas dengan calculation)
     public void setTotalHarga(double totalHarga) {
         this.totalHarga = BigDecimal.valueOf(totalHarga);
     }
@@ -208,35 +187,21 @@ public class TransaksiPenjualanProduk {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    // ==================== HELPER METHODS ====================
-    
-    /**
-     * Get total harga as double (untuk display & calculation)
-     */
+
     public double getTotalHargaAsDouble() {
         return totalHarga != null ? totalHarga.doubleValue() : 0.0;
     }
-    
-    /**
-     * Get harga satuan as double (untuk calculation)
-     */
+
     public double getHargaSatuanAsDouble() {
         return hargaSatuan != null ? hargaSatuan.doubleValue() : 0.0;
     }
-    
-    /**
-     * Calculate total harga otomatis
-     */
+
     public void calculateTotalHarga() {
         if (hargaSatuan != null && jumlahJual > 0) {
             this.totalHarga = hargaSatuan.multiply(BigDecimal.valueOf(jumlahJual));
         }
     }
-    
-    /**
-     * Validate transaksi (untuk cek sebelum save)
-     */
+
     public boolean isValid() {
         return kodeTransaksi != null && !kodeTransaksi.isEmpty()
             && tanggalTransaksi != null
@@ -250,9 +215,6 @@ public class TransaksiPenjualanProduk {
             && totalHarga != null && totalHarga.compareTo(BigDecimal.ZERO) > 0;
     }
     
-    /**
-     * Get formatted display (untuk debugging)
-     */
     @Override
     public String toString() {
         return "TransaksiPenjualanProduk{" +

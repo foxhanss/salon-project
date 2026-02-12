@@ -49,7 +49,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="727" max="32767" attributes="0"/>
+                      <EmptySpace pref="748" max="32767" attributes="0"/>
                       <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jPanel13" min="-2" max="-2" attributes="0"/>
@@ -158,7 +158,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="SansSerif" size="20" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Layanan Terfavorit"/>
+                    <Property name="text" type="java.lang.String" value="Layanan Terlaris"/>
                   </Properties>
                 </Component>
               </SubComponents>

@@ -101,7 +101,7 @@
                                   <Group type="102" attributes="0">
                                       <Component id="btnEdit" min="-2" pref="80" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btnHapus" min="-2" pref="157" max="-2" attributes="0"/>
+                                      <Component id="btnNonAktif" min="-2" pref="157" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="btnRestore" min="-2" pref="104" max="-2" attributes="0"/>
                                   </Group>
@@ -148,11 +148,12 @@
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btnTambah" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                   <Component id="btnClear" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btnCari" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                   <Component id="txtCari" alignment="3" max="32767" attributes="0"/>
@@ -164,7 +165,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnEdit" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                          <Component id="btnHapus" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="btnNonAktif" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                           <Component id="btnRestore" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="617" max="32767" attributes="0"/>
@@ -281,7 +282,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnHapus">
+            <Component class="javax.swing.JButton" name="btnNonAktif">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Times New Roman" size="18" style="1"/>
@@ -294,7 +295,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHapusActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNonAktifActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnViewMember">
@@ -596,6 +597,11 @@
                         <StringItem index="2" value="Gold"/>
                         <StringItem index="3" value="Platinum"/>
                       </StringArray>
+                    </Property>
+                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                      <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                        <BevelBorder/>
+                      </Border>
                     </Property>
                   </Properties>
                   <Events>

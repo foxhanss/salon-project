@@ -1,38 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 import java.util.Date;
-/**
- *
- * @author T480
- */
+
 public class TransaksiLayanan {
-    private String kodeTransaksi;        // PRIMARY KEY (database: kode_transaksi)
-    private String kodePelanggan;        // FK (database: kode_pelanggan)
-    private String namaLengkap;          // Nama pelanggan (database: nama_lengkap)
-    private String noTelepon;            // No telepon (database: no_telepon)
-    private String kodeKaryawan;         // FK (database: kode_karyawan)
-    private String namaKaryawan;         // Nama karyawan (database: nama_karyawan)
-    private Date tanggalTransaksi;       // Tanggal transaksi (database: tanggal_transaksi)
-    private String kodeLayanan;          // FK (database: kode_layanan)
-    private String namaLayanan;          // Nama layanan (database: nama_layanan)
-    private double hargaLayanan;         // Harga layanan (database: harga_layanan)
-    private double subtotalLayanan;      // Subtotal (database: subtotal_layanan)
-    private String diskon;               // Diskon (database: diskon)
-    private double totalPembayaran;      // Total (database: total_pembayaran)
-    private String metodePembayaran;     // Metode (database: metode_pembayaran)
-    private String statusPembayaran;     // Status (database: status_pembayaran)
-    private String catatanKhusus;        // Catatan (database: catatan_khusus)
-    private Date createdAt;              // Created at (database: created_at)
-    private Date updatedAt;              // Updated at (database: updated_at)
-    
-    // ==================== CONSTRUCTORS ====================
-    
-    public TransaksiLayanan() {
-    }
+    private String kodeTransaksi;        
+    private String kodePelanggan;        
+    private String namaLengkap;          
+    private String noTelepon;            
+    private String kodeKaryawan;         
+    private String namaKaryawan;         
+    private Date tanggalTransaksi;       
+    private String kodeLayanan;          
+    private String namaLayanan;          
+    private double hargaLayanan;         
+    private double subtotalLayanan;      
+    private String diskon;               
+    private double totalPembayaran;      
+    private String metodePembayaran;     
+    private String statusPembayaran;     
+    private String catatanKhusus;        
+    private Date createdAt;              
+    private Date updatedAt;              
+
+    public TransaksiLayanan() {}
     
     public TransaksiLayanan(String kodeTransaksi, String kodePelanggan, String namaLengkap,
                             String noTelepon, String kodeKaryawan, String namaKaryawan,
@@ -56,9 +45,7 @@ public class TransaksiLayanan {
         this.metodePembayaran = metodePembayaran;
         this.statusPembayaran = statusPembayaran;
     }
-    
-    // ==================== GETTERS & SETTERS ====================
-    
+
     public String getKodeTransaksi() {
         return kodeTransaksi;
     }
@@ -202,8 +189,6 @@ public class TransaksiLayanan {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    // ==================== TO STRING ====================
     
     @Override
     public String toString() {

@@ -1,43 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 import java.util.Date;
-/**
- *
- * @author T480
- */
+
 public class Pelanggan {
-    private String kodePelanggan;           // Primary Key (auto-generate: PLG-001)
-    private String namaLengkap;             // Nama lengkap pelanggan
-    private String noTelepon;               // No telepon (unique)
-    private String email;                   // Email (unique, nullable)
-    private Date tanggalLahir;              // Tanggal lahir (nullable)
-    private String jenisKelamin;            // "Laki-Laki" atau "Perempuan"
-    private String alamat;                  // Alamat lengkap (nullable)
-    private Date tanggalRegistrasi;         // Auto-fill saat insert
-    private String membershipType;          // "Regular", "Silver", "Gold", "Platinum"
-    private String discountMember;          // "0%", "5%", "10%", "15%"
-    private String status;                  // "Aktif", "Non-Aktif", "Deleted"
-    private double totalSpending;           // Lifetime value (total belanja)
-    private String catatanKhusus;           // Alergi, preferensi, dll (nullable)
+    private String kodePelanggan;
+    private String namaLengkap;
+    private String noTelepon;
+    private String email;
+    private Date tanggalLahir;
+    private String jenisKelamin;
+    private String alamat;
+    private Date tanggalRegistrasi;
+    private String membershipType;
+    private String discountMember;
+    private String status;
+    private double totalSpending;
+    private String catatanKhusus;
+    private Date deletedAt;
+    private String deletedBy;
     
-    // ⭐ Field untuk soft delete tracking
-    private Date deletedAt;                 // Waktu dihapus
-    private String deletedBy;               // User yang menghapus
-    
-    // ==================== CONSTRUCTORS ====================
-    
-    /**
-     * Constructor kosong (default)
-     */
     public Pelanggan() {}
     
-    /**
-     * Constructor lengkap (TANPA status, deletedAt, deletedBy - untuk insert baru)
-     */
     public Pelanggan(String kodePelanggan, String namaLengkap, String noTelepon, 
                      String email, Date tanggalLahir, String jenisKelamin, 
                      String alamat, Date tanggalRegistrasi, String membershipType, 
@@ -54,12 +36,9 @@ public class Pelanggan {
         this.discountMember = discountMember;
         this.totalSpending = totalSpending;
         this.catatanKhusus = catatanKhusus;
-        this.status = "Aktif";  // ⭐ Default status
+        this.status = "Aktif";
     }
     
-    /**
-     * Constructor super lengkap (termasuk status dan soft delete fields)
-     */
     public Pelanggan(String kodePelanggan, String namaLengkap, String noTelepon, 
                      String email, Date tanggalLahir, String jenisKelamin, 
                      String alamat, Date tanggalRegistrasi, String membershipType, 
@@ -81,8 +60,6 @@ public class Pelanggan {
         this.deletedAt = deletedAt;
         this.deletedBy = deletedBy;
     }
-    
-    // ==================== GETTER & SETTER ====================
     
     public String getKodePelanggan() { 
         return kodePelanggan; 
@@ -188,7 +165,6 @@ public class Pelanggan {
         this.catatanKhusus = catatanKhusus; 
     }
     
-    // ⭐ Getter & Setter untuk soft delete
     public Date getDeletedAt() { 
         return deletedAt; 
     }
@@ -204,57 +180,30 @@ public class Pelanggan {
     public void setDeletedBy(String deletedBy) { 
         this.deletedBy = deletedBy; 
     }
-    
-    // ==================== HELPER METHODS ====================
-    
-    /**
-     * Cek apakah pelanggan sudah dihapus (soft delete)
-     * @return true jika status = "Deleted"
-     */
+
     public boolean isDeleted() {
         return "Deleted".equals(this.status);
     }
-    
-    /**
-     * Cek apakah pelanggan masih aktif
-     * @return true jika status = "Aktif"
-     */
+
     public boolean isActive() {
         return "Aktif".equals(this.status);
     }
-    
-    /**
-     * Cek apakah pelanggan non-aktif
-     * @return true jika status = "Non-Aktif"
-     */
+
     public boolean isNonActive() {
         return "Non-Aktif".equals(this.status);
     }
-    
-    /**
-     * Get discount value as integer (untuk perhitungan)
-     * Contoh: "15%" → 15
-     * @return discount value
-     */
+
     public int getDiscountValue() {
         if (discountMember == null || discountMember.isEmpty()) {
             return 0;
         }
         return Integer.parseInt(discountMember.replace("%", ""));
     }
-    
-    /**
-     * Format total spending as currency
-     * @return formatted string (Rp xxx.xxx)
-     */
+
     public String getFormattedTotalSpending() {
         return String.format("Rp %,.0f", totalSpending);
     }
-    
-    /**
-     * Get age from tanggalLahir
-     * @return age in years, or -1 if tanggalLahir is null
-     */
+
     public int getAge() {
         if (tanggalLahir == null) {
             return -1;
@@ -267,39 +216,27 @@ public class Pelanggan {
         
         int age = today.get(java.util.Calendar.YEAR) - birthCalendar.get(java.util.Calendar.YEAR);
         
-        // Adjust if birthday hasn't occurred this year
         if (today.get(java.util.Calendar.DAY_OF_YEAR) < birthCalendar.get(java.util.Calendar.DAY_OF_YEAR)) {
             age--;
         }
         
         return age;
     }
-    
-    /**
-     * Validate email format
-     * @return true if email is valid
-     */
+
     public boolean hasValidEmail() {
         if (email == null || email.isEmpty()) {
             return false;
         }
         return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
-    
-    /**
-     * Validate phone number (Indonesian format)
-     * @return true if phone number is valid
-     */
+
     public boolean hasValidPhoneNumber() {
         if (noTelepon == null || noTelepon.isEmpty()) {
             return false;
         }
-        // Indonesian phone: 08xxx or +628xxx, 10-13 digits
         return noTelepon.matches("^(\\+62|62|0)[0-9]{9,12}$");
     }
-    
-    // ==================== OVERRIDE METHODS ====================
-    
+
     @Override
     public String toString() {
         return "Pelanggan{" +

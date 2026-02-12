@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="85a74720-a9cd-4197-b700-38f7d6dcd0c8">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="95"/>
+	<parameter name="p_tanggal_mulai" class="java.util.Date">
+		<parameterDescription><![CDATA[Tanggal mulai periode penjualan]]></parameterDescription>
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_tanggal_sampai" class="java.util.Date">
+		<parameterDescription><![CDATA[Tanggal akhir periode penjualan]]></parameterDescription>
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_kategori" class="java.lang.String">
+		<parameterDescription><![CDATA[Filter kategori produk]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Semua Kategori"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="namaUser" class="java.lang.String"/>
+	<parameter name="roleUser" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    p.kode_produk,
+    p.nama_produk,
+    p.kategori_produk,
+    SUM(tp.jumlah_jual) as jumlah_terjual,
+    SUM(tp.total_harga) as total_pendapatan,
+    SUM(tp.jumlah_jual * (tp.harga_satuan - COALESCE(p.harga_beli, 0))) as profit,
+    (SELECT COUNT(DISTINCT p_inner.kode_produk) 
+     FROM transaksi_penjualan_produk tp_inner
+     INNER JOIN master_produk p_inner ON tp_inner.kode_produk = p_inner.kode_produk
+     WHERE tp_inner.tanggal_transaksi >= $P{p_tanggal_mulai}
+       AND tp_inner.tanggal_transaksi <= DATE_ADD($P{p_tanggal_sampai}, INTERVAL 1 DAY)
+       AND (IFNULL($P{p_kategori}, 'Semua Kategori') = 'Semua Kategori' 
+            OR p_inner.kategori_produk = $P{p_kategori})
+    ) as total_produk,
+    (SELECT COALESCE(SUM(tp_inner.jumlah_jual), 0) 
+     FROM transaksi_penjualan_produk tp_inner
+     INNER JOIN master_produk p_inner ON tp_inner.kode_produk = p_inner.kode_produk
+     WHERE tp_inner.tanggal_transaksi >= $P{p_tanggal_mulai}
+       AND tp_inner.tanggal_transaksi <= DATE_ADD($P{p_tanggal_sampai}, INTERVAL 1 DAY)
+       AND (IFNULL($P{p_kategori}, 'Semua Kategori') = 'Semua Kategori' 
+            OR p_inner.kategori_produk = $P{p_kategori})
+    ) as grand_total_terjual,
+    (SELECT COALESCE(SUM(tp_inner.total_harga), 0) 
+     FROM transaksi_penjualan_produk tp_inner
+     INNER JOIN master_produk p_inner ON tp_inner.kode_produk = p_inner.kode_produk
+     WHERE tp_inner.tanggal_transaksi >= $P{p_tanggal_mulai}
+       AND tp_inner.tanggal_transaksi <= DATE_ADD($P{p_tanggal_sampai}, INTERVAL 1 DAY)
+       AND (IFNULL($P{p_kategori}, 'Semua Kategori') = 'Semua Kategori' 
+            OR p_inner.kategori_produk = $P{p_kategori})
+    ) as grand_total_pendapatan,
+    (SELECT COALESCE(SUM(tp_inner.jumlah_jual * (tp_inner.harga_satuan - COALESCE(p_inner.harga_beli, 0))), 0) 
+     FROM transaksi_penjualan_produk tp_inner
+     INNER JOIN master_produk p_inner ON tp_inner.kode_produk = p_inner.kode_produk
+     WHERE tp_inner.tanggal_transaksi >= $P{p_tanggal_mulai}
+       AND tp_inner.tanggal_transaksi <= DATE_ADD($P{p_tanggal_sampai}, INTERVAL 1 DAY)
+       AND (IFNULL($P{p_kategori}, 'Semua Kategori') = 'Semua Kategori' 
+            OR p_inner.kategori_produk = $P{p_kategori})
+    ) as grand_total_profit
+FROM transaksi_penjualan_produk tp
+INNER JOIN master_produk p ON tp.kode_produk = p.kode_produk
+WHERE tp.tanggal_transaksi >= $P{p_tanggal_mulai}
+  AND tp.tanggal_transaksi <= DATE_ADD($P{p_tanggal_sampai}, INTERVAL 1 DAY)
+  AND (IFNULL($P{p_kategori}, 'Semua Kategori') = 'Semua Kategori' 
+       OR p.kategori_produk = $P{p_kategori})
+GROUP BY p.kode_produk, p.nama_produk, p.kategori_produk
+ORDER BY jumlah_terjual DESC, total_pendapatan DESC]]>
+	</queryString>
+	<field name="kode_produk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_produk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="kategori_produk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah_terjual" class="java.math.BigDecimal"/>
+	<field name="total_pendapatan" class="java.math.BigDecimal"/>
+	<field name="profit" class="java.math.BigDecimal"/>
+	<field name="total_produk" class="java.lang.Long"/>
+	<field name="grand_total_terjual" class="java.math.BigDecimal"/>
+	<field name="grand_total_pendapatan" class="java.math.BigDecimal"/>
+	<field name="grand_total_profit" class="java.math.BigDecimal"/>
+	<variable name="v_nomor" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[new java.lang.Integer(1)]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="84" y="16" width="403" height="38" uuid="8ca6a456-70de-4e24-8f71-822380a29a12"/>
+				<textElement>
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN PENJUALAN PRODUK]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="51" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="e9400e35-3331-4cd8-80f7-77b1021863be"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Periode: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{p_tanggal_mulai}) + "   s/d    " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{p_tanggal_sampai})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="555" height="20" uuid="53bcf1de-68cd-4fc0-97d0-8da746cf6e0f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Kategori: " + $P{p_kategori}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement x="28" y="0" width="106" height="20" uuid="d50ef84f-f064-441c-b331-88213d440faa"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Produk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="134" y="0" width="88" height="20" uuid="cbf7cad0-cf9e-4b76-8af9-b4052d26eb44"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kategori]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="0" width="65" height="20" uuid="f37fb9b4-37cf-40ec-b0c9-b3c95d08bbb8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Terjual]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="0" width="103" height="20" uuid="bbf54985-2ce9-4176-8288-c085b99560c2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pendapat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="0" width="70" height="20" uuid="97a8531c-55c6-44a9-a71a-73d6138397b9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="0" width="92" height="20" uuid="5d47bdeb-941c-41fb-8669-5b3cd4f213fc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Produk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="28" height="20" uuid="5ca24eb5-8db9-4a24-a1ef-78dab9304071"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="28" y="0" width="106" height="20" uuid="1efb0eb8-3068-47f8-ac2f-ea04b906a1d7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama_produk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="0" width="88" height="20" uuid="b9c53d70-69b2-4e7f-94b7-dad4b7a99cf7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kategori_produk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="0" width="65" height="20" uuid="a562deb3-6e26-4e6f-8ae6-e36e36b01c26"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlah_terjual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="0" width="103" height="20" uuid="ac329d08-b3d3-46d0-bf70-4d864a888e07"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_pendapatan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="70" height="20" uuid="1cb07907-8016-4635-881c-4f5ea379ff23"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{profit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="92" height="20" uuid="beeade69-ba4c-432f-85a3-1e2958dcac77"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_produk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="28" height="20" uuid="642d4c75-3232-457f-b961-ec590f863873"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{v_nomor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="264" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="13" width="555" height="20" uuid="e45a7e6e-3a69-4c36-9f6d-6dc60fe4dd75"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Produk           :   "+ $F{total_produk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="33" width="555" height="20" uuid="6eab3245-10b1-4995-a28d-84169d37490b"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Kuantitas       :   "+ $F{grand_total_terjual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="53" width="555" height="20" uuid="8daede2c-1f94-42ab-b6ef-7e87d5323682"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Pendapatan   :  Rp " + new java.text.DecimalFormat("#,##0").format($F{grand_total_pendapatan})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="73" width="555" height="20" uuid="26272fbc-0a35-46ee-b44b-4efb92da0c13"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Profit              :  Rp " + new java.text.DecimalFormat("#,##0").format($F{grand_total_profit})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="133" width="196" height="20" uuid="6801c137-1fa1-4a4c-a844-a262e5ec981f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bekasi, " + new java.text.SimpleDateFormat("EEEE dd MMMM yyyy", new java.util.Locale("id")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="232" width="108" height="20" uuid="f80fcb4e-7d03-4ffa-9bf3-6727bac9be6d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roleUser}
+]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="398" y="208" width="148" height="20" uuid="7d94470a-d336-4ab3-93a7-79054c281e29"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaUser}
+]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="feec2842-f5ce-43e0-965e-4e47ed5bb497">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="p_tanggal_mulai" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_tanggal_sampai" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_membership" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Semua"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_jenis_kelamin" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Semua Jenis Kelamin"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="namaUser" class="java.lang.String"/>
+	<parameter name="p_summary_regular" class="java.lang.String"/>
+	<parameter name="p_summary_silver" class="java.lang.String"/>
+	<parameter name="p_summary_gold" class="java.lang.String"/>
+	<parameter name="p_summary_platinum" class="java.lang.String"/>
+	<parameter name="p_summary_total" class="java.lang.String"/>
+	<parameter name="roleUser" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    kode_pelanggan,
+    nama_lengkap,
+    no_telepon,
+    email,
+    membership_type,
+    jenis_kelamin,
+    tanggal_registrasi
+FROM master_pelanggan
+WHERE status = 'Aktif'
+  AND ($P{p_tanggal_mulai} IS NULL OR tanggal_registrasi >= $P{p_tanggal_mulai})
+  AND ($P{p_tanggal_sampai} IS NULL OR tanggal_registrasi <= $P{p_tanggal_sampai})
+  AND ($P{p_membership} = 'Semua' OR membership_type = $P{p_membership})
+  AND ($P{p_jenis_kelamin} = 'Semua Jenis Kelamin' OR jenis_kelamin = $P{p_jenis_kelamin})
+ORDER BY tanggal_registrasi DESC]]>
+	</queryString>
+	<field name="kode_pelanggan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_lengkap" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="no_telepon" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="membership_type" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jenis_kelamin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tanggal_registrasi" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="v_nomor" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{v_nomor}]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(1)]]></initialValueExpression>
+	</variable>
+	<variable name="v_count_regular" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{membership_type}.equals("Regular") ? 1 : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="v_count_silver" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{membership_type}.equals("Silver") ? 1 : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="v_count_gold" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{membership_type}.equals("Gold") ? 1 : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="v_count_platinum" class="java.lang.String" calculation="Sum">
+		<variableExpression><![CDATA[$F{membership_type}.equals("Platinum") ? 1 : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="v_total_pelanggan" class="java.lang.String" calculation="Count">
+		<variableExpression><![CDATA[$V{v_total_pelanggan}]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="181" y="14" width="454" height="38" uuid="92a9a663-9eaf-4cda-96a0-31bc7261d42a"/>
+				<textElement>
+					<font size="30" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN PELANGGAN BARU]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="68" height="20" uuid="3e33e2a4-5370-498a-a4d9-a25ea8aa2b4d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Periode :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="0" width="23" height="20" uuid="51aa50b8-0069-41d7-8804-6a5e17f88569"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[s/d]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="68" y="0" width="113" height="20" uuid="efbc3ce7-48f5-4d21-a127-300fca975c2f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_tanggal_mulai}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="232" y="0" width="100" height="20" uuid="329623cc-3e8d-4300-9692-1027791b2eaf"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_tanggal_sampai}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="26" height="20" uuid="75937831-4436-4b0b-9518-7d799fb63973"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="0" width="94" height="20" uuid="8e046a9f-281a-485b-b345-e302559b3321"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="0" width="137" height="20" uuid="05abedca-5b27-4c7d-9b18-807020f95489"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Pelanggan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="0" width="100" height="20" uuid="ef04f2de-6e56-48dd-9e45-365e18c79b2c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Telp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="357" y="0" width="157" height="20" uuid="184588ab-3dca-43de-a673-525876055bcd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="514" y="0" width="100" height="20" uuid="0023d651-55db-4fd4-84dd-fbb3fecd7a19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Membership]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="614" y="0" width="118" height="20" uuid="7e853d66-cee6-4253-bc09-d1bf0279bb01"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jenis Kelamin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="732" y="0" width="70" height="20" uuid="99bd3dc9-4c55-42ee-a5b4-da7640603608"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="26" height="20" uuid="4ddb3a1c-3442-4ba3-a1be-f4e34ee6ddb3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{v_nomor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="26" y="0" width="94" height="20" uuid="10bdb18f-1fbd-4fe1-8020-db66881480a9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kode_pelanggan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="0" width="137" height="20" uuid="e9f56192-f0c7-40da-9657-e7fd502d415f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama_lengkap}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="257" y="0" width="100" height="20" uuid="58f16785-a02c-485c-bd89-0a71bbc74481"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_telepon}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="357" y="0" width="157" height="20" uuid="f49dab27-0f3c-44d7-882c-458f3dd6dcd4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="514" y="0" width="100" height="20" uuid="acd1ef26-2ce8-4b5e-91f9-c04bf209e20d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{membership_type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="614" y="0" width="118" height="20" uuid="e10d6f28-19a7-4eda-9ead-61083aaa0ec5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jenis_kelamin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="732" y="0" width="70" height="20" uuid="2c604704-f66c-4fb2-879c-c56a03d34bf1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yy").format($F{tanggal_registrasi})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="155" splitType="Stretch">
+			<textField>
+				<reportElement x="645" y="91" width="148" height="20" uuid="98c589d5-5145-4812-adb1-d4b535194538"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaUser}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="606" y="16" width="196" height="20" uuid="fdb2e188-ea9b-4aa0-9150-5c420c143ad5"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bekasi, " + new java.text.SimpleDateFormat("EEEE dd MMMM yyyy", new java.util.Locale("id")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="679" y="115" width="108" height="20" uuid="6e615fec-ae3f-4b1c-8565-66607850602f"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roleUser}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="11" width="131" height="20" uuid="667688b8-a582-4b20-b723-3aeeb555a0c8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Regular                :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="31" width="131" height="20" uuid="a720e5f5-8946-4570-b7d3-74ecb9f676d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Silver                    :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="51" width="131" height="20" uuid="1a24fd16-ff2b-4140-ba0e-09da02aba4f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gold                      :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="71" width="131" height="20" uuid="5bee900c-33f5-4e1b-97fe-6cc086a14ce7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Platinum               :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="91" width="131" height="20" uuid="d858dace-919d-47d6-a7f7-61e744f99fb6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pelanggan    :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="141" y="11" width="287" height="20" uuid="d2f930c7-3a25-4f51-bc40-a6598da23d9c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_regular}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="31" width="287" height="20" uuid="00a90419-9229-4ebf-abef-eafb161531ae"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_silver}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="51" width="287" height="20" uuid="9df70bda-dc53-4aec-a152-f00801b69eb3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_gold}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="71" width="287" height="20" uuid="9ec1d903-7dd8-41ff-9dbc-68d331f14196"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_platinum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="91" width="287" height="20" uuid="ee301520-32f6-48ef-a2af-7f68385e4df6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

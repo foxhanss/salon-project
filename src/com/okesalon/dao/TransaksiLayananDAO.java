@@ -1,119 +1,185 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.dao;
+import com.okesalon.util.koneksi;
 import com.okesalon.model.TransaksiLayanan;
-import koneksi.koneksi;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.text.SimpleDateFormat;
-/**
- *
- * @author T480
- */
+
 public class TransaksiLayananDAO {
-    // ==================== CREATE ====================
-    
-    /**
-     * Insert transaksi layanan baru
-     */
+    public TransaksiLayananDAO() {}
+
     public boolean insertTransaksi(TransaksiLayanan transaksi) {
         String sql = "INSERT INTO transaksi_layanan " +
                      "(kode_transaksi, kode_pelanggan, nama_lengkap, no_telepon, " +
-                     "kode_karyawan, nama_karyawan, tanggal_transaksi, kode_layanan, " +
-                     "nama_layanan, harga_layanan, subtotal_layanan, diskon, " +
-                     "total_pembayaran, metode_pembayaran, status_pembayaran) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "kode_karyawan, nama_karyawan, kode_layanan, nama_layanan, " +
+                     "harga_layanan, tanggal_transaksi, subtotal_layanan, diskon, " +
+                     "total_pembayaran, metode_pembayaran, status_pembayaran, catatan_khusus) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        System.out.println("insertTransaksi() called");
+        System.out.println("   Kode Transaksi: " + transaksi.getKodeTransaksi());
+        System.out.println("   Nama Pelanggan: " + transaksi.getNamaLengkap());
+        System.out.println("   Nama Karyawan: " + transaksi.getNamaKaryawan());
+        System.out.println("   Nama Layanan: " + transaksi.getNamaLayanan());
         
         try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, transaksi.getKodeTransaksi());
-            pstmt.setString(2, transaksi.getKodePelanggan());
-            pstmt.setString(3, transaksi.getNamaLengkap());
-            pstmt.setString(4, transaksi.getNoTelepon());
-            pstmt.setString(5, transaksi.getKodeKaryawan());
-            pstmt.setString(6, transaksi.getNamaKaryawan());
-            pstmt.setDate(7, new java.sql.Date(transaksi.getTanggalTransaksi().getTime()));
-            pstmt.setString(8, transaksi.getKodeLayanan());
-            pstmt.setString(9, transaksi.getNamaLayanan());
-            pstmt.setDouble(10, transaksi.getHargaLayanan());
-            pstmt.setDouble(11, transaksi.getSubtotalLayanan());
-            pstmt.setString(12, transaksi.getDiskon());
-            pstmt.setDouble(13, transaksi.getTotalPembayaran());
-            pstmt.setString(14, transaksi.getMetodePembayaran());
-            pstmt.setString(15, transaksi.getStatusPembayaran());
+            if (conn == null) {
+                System.err.println("Connection is NULL!");
+                return false;
+            }
+
+            ps.setString(1, transaksi.getKodeTransaksi());
+            ps.setString(2, transaksi.getKodePelanggan());
+            ps.setString(3, transaksi.getNamaLengkap());
+            ps.setString(4, transaksi.getNoTelepon());
+            ps.setString(5, transaksi.getKodeKaryawan());
+            ps.setString(6, transaksi.getNamaKaryawan());
+            ps.setString(7, transaksi.getKodeLayanan());
+            ps.setString(8, transaksi.getNamaLayanan());
+            ps.setDouble(9, transaksi.getHargaLayanan());
+            ps.setDate(10, new java.sql.Date(transaksi.getTanggalTransaksi().getTime()));
+            ps.setDouble(11, transaksi.getSubtotalLayanan());
+            ps.setString(12, transaksi.getDiskon());
+            ps.setDouble(13, transaksi.getTotalPembayaran());
+            ps.setString(14, transaksi.getMetodePembayaran());
+            ps.setString(15, transaksi.getStatusPembayaran());
+            ps.setString(16, transaksi.getCatatanKhusus());
             
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+            int result = ps.executeUpdate();
+            
+            if (result > 0) {
+                System.out.println("Transaksi berhasil disimpan!");
+                return true;
+            } else {
+                System.err.println("Insert failed!");
+                return false;
+            }
             
         } catch (SQLException e) {
-            System.err.println("Error inserting transaksi: " + e.getMessage());
+            System.err.println("Error insertTransaksi: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-    
-    // ==================== READ ====================
-    
-    /**
-     * Get all transaksi layanan
-     */
-    public List<TransaksiLayanan> getAllTransaksi() {
-        List<TransaksiLayanan> transaksiList = new ArrayList<>();
+
+    public List<TransaksiLayanan> getAll() {
+        List<TransaksiLayanan> list = new ArrayList<>();
         String sql = "SELECT * FROM transaksi_layanan ORDER BY tanggal_transaksi DESC, created_at DESC";
         
-        try (Connection conn = koneksi.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = koneksi.getConnection();
+            
+            if (conn == null) {
+                System.err.println("Connection is NULL!");
+                return list;
+            }
+            
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
             
             while (rs.next()) {
-                TransaksiLayanan transaksi = extractTransaksiFromResultSet(rs);
-                transaksiList.add(transaksi);
+                TransaksiLayanan t = extractFromResultSet(rs);
+                list.add(t);
             }
             
         } catch (SQLException e) {
-            System.err.println("Error getting all transaksi: " + e.getMessage());
+            System.err.println("Error getAll: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
         }
         
-        return transaksiList;
+        return list;
     }
-    
-    /**
-     * Get transaksi by Kode Transaksi
-     */
-    public TransaksiLayanan getTransaksiByNo(String kodeTransaksi) {
-        TransaksiLayanan transaksi = null;
+
+    public TransaksiLayanan getByKode(String kodeTransaksi) {
         String sql = "SELECT * FROM transaksi_layanan WHERE kode_transaksi = ?";
         
         try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, kodeTransaksi);
-            ResultSet rs = pstmt.executeQuery();
+            ps.setString(1, kodeTransaksi);
+            ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                transaksi = extractTransaksiFromResultSet(rs);
+                return extractFromResultSet(rs);
             }
             
         } catch (SQLException e) {
-            System.err.println("Error getting transaksi by kode: " + e.getMessage());
+            System.err.println("❌ Error getByKode: " + e.getMessage());
             e.printStackTrace();
         }
         
-        return transaksi;
+        return null;
     }
-    
-    /**
-     * Search transaksi
-     */
-    public List<TransaksiLayanan> searchTransaksi(String keyword) {
-        List<TransaksiLayanan> transaksiList = new ArrayList<>();
+
+    public boolean update(TransaksiLayanan transaksi) {
+        String sql = "UPDATE transaksi_layanan SET " +
+                     "kode_pelanggan = ?, nama_lengkap = ?, no_telepon = ?, " +
+                     "kode_karyawan = ?, nama_karyawan = ?, kode_layanan = ?, " +
+                     "nama_layanan = ?, harga_layanan = ?, tanggal_transaksi = ?, " +
+                     "subtotal_layanan = ?, diskon = ?, total_pembayaran = ?, " +
+                     "metode_pembayaran = ?, status_pembayaran = ?, catatan_khusus = ? " +
+                     "WHERE kode_transaksi = ?";
+        
+        try (Connection conn = koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, transaksi.getKodePelanggan());
+            ps.setString(2, transaksi.getNamaLengkap());
+            ps.setString(3, transaksi.getNoTelepon());
+            ps.setString(4, transaksi.getKodeKaryawan());
+            ps.setString(5, transaksi.getNamaKaryawan());
+            ps.setString(6, transaksi.getKodeLayanan());
+            ps.setString(7, transaksi.getNamaLayanan());
+            ps.setDouble(8, transaksi.getHargaLayanan());
+            ps.setDate(9, new java.sql.Date(transaksi.getTanggalTransaksi().getTime()));
+            ps.setDouble(10, transaksi.getSubtotalLayanan());
+            ps.setString(11, transaksi.getDiskon());
+            ps.setDouble(12, transaksi.getTotalPembayaran());
+            ps.setString(13, transaksi.getMetodePembayaran());
+            ps.setString(14, transaksi.getStatusPembayaran());
+            ps.setString(15, transaksi.getCatatanKhusus());
+            ps.setString(16, transaksi.getKodeTransaksi());
+            
+            return ps.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Error update: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete(String kodeTransaksi) {
+        String sql = "DELETE FROM transaksi_layanan WHERE kode_transaksi = ?";
+        
+        try (Connection conn = koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, kodeTransaksi);
+            return ps.executeUpdate() > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Error delete: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<TransaksiLayanan> search(String keyword) {
+        List<TransaksiLayanan> list = new ArrayList<>();
         String sql = "SELECT * FROM transaksi_layanan " +
                      "WHERE kode_transaksi LIKE ? " +
                      "OR nama_lengkap LIKE ? " +
@@ -122,128 +188,31 @@ public class TransaksiLayananDAO {
                      "ORDER BY tanggal_transaksi DESC";
         
         try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            String searchPattern = "%" + keyword + "%";
-            pstmt.setString(1, searchPattern);
-            pstmt.setString(2, searchPattern);
-            pstmt.setString(3, searchPattern);
-            pstmt.setString(4, searchPattern);
+            String pattern = "%" + keyword + "%";
+            ps.setString(1, pattern);
+            ps.setString(2, pattern);
+            ps.setString(3, pattern);
+            ps.setString(4, pattern);
             
-            ResultSet rs = pstmt.executeQuery();
+            ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
-                TransaksiLayanan transaksi = extractTransaksiFromResultSet(rs);
-                transaksiList.add(transaksi);
+                TransaksiLayanan t = extractFromResultSet(rs);
+                list.add(t);
             }
             
         } catch (SQLException e) {
-            System.err.println("Error searching transaksi: " + e.getMessage());
+            System.err.println("Error search: " + e.getMessage());
             e.printStackTrace();
         }
         
-        return transaksiList;
+        return list;
     }
-    
-    // ==================== UPDATE ====================
-    
-    /**
-     * Update transaksi layanan
-     */
-    public boolean updateTransaksi(TransaksiLayanan transaksi) {
-        String sql = "UPDATE transaksi_layanan SET " +
-                     "kode_pelanggan = ?, nama_lengkap = ?, no_telepon = ?, " +
-                     "kode_karyawan = ?, nama_karyawan = ?, tanggal_transaksi = ?, " +
-                     "kode_layanan = ?, nama_layanan = ?, harga_layanan = ?, " +
-                     "subtotal_layanan = ?, diskon = ?, total_pembayaran = ?, " +
-                     "metode_pembayaran = ?, status_pembayaran = ? " +
-                     "WHERE kode_transaksi = ?";
-        
-        try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, transaksi.getKodePelanggan());
-            pstmt.setString(2, transaksi.getNamaLengkap());
-            pstmt.setString(3, transaksi.getNoTelepon());
-            pstmt.setString(4, transaksi.getKodeKaryawan());
-            pstmt.setString(5, transaksi.getNamaKaryawan());
-            pstmt.setDate(6, new java.sql.Date(transaksi.getTanggalTransaksi().getTime()));
-            pstmt.setString(7, transaksi.getKodeLayanan());
-            pstmt.setString(8, transaksi.getNamaLayanan());
-            pstmt.setDouble(9, transaksi.getHargaLayanan());
-            pstmt.setDouble(10, transaksi.getSubtotalLayanan());
-            pstmt.setString(11, transaksi.getDiskon());
-            pstmt.setDouble(12, transaksi.getTotalPembayaran());
-            pstmt.setString(13, transaksi.getMetodePembayaran());
-            pstmt.setString(14, transaksi.getStatusPembayaran());
-            pstmt.setString(15, transaksi.getKodeTransaksi());
-            
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
-            
-        } catch (SQLException e) {
-            System.err.println("Error updating transaksi: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    // ==================== DELETE ====================
-    
-    /**
-     * Delete transaksi
-     */
-    public boolean deleteTransaksi(String kodeTransaksi) {
-        String sql = "DELETE FROM transaksi_layanan WHERE kode_transaksi = ?";
-        
-        try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, kodeTransaksi);
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
-            
-        } catch (SQLException e) {
-            System.err.println("Error deleting transaksi: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    // ==================== HELPER METHODS ====================
-    
-    /**
-     * Extract TransaksiLayanan from ResultSet
-     */
-    private TransaksiLayanan extractTransaksiFromResultSet(ResultSet rs) throws SQLException {
-        TransaksiLayanan transaksi = new TransaksiLayanan();
-        transaksi.setKodeTransaksi(rs.getString("kode_transaksi"));
-        transaksi.setKodePelanggan(rs.getString("kode_pelanggan"));
-        transaksi.setNamaLengkap(rs.getString("nama_lengkap"));
-        transaksi.setNoTelepon(rs.getString("no_telepon"));
-        transaksi.setKodeKaryawan(rs.getString("kode_karyawan"));
-        transaksi.setNamaKaryawan(rs.getString("nama_karyawan"));
-        transaksi.setTanggalTransaksi(rs.getDate("tanggal_transaksi"));
-        transaksi.setKodeLayanan(rs.getString("kode_layanan"));
-        transaksi.setNamaLayanan(rs.getString("nama_layanan"));
-        transaksi.setHargaLayanan(rs.getDouble("harga_layanan"));
-        transaksi.setSubtotalLayanan(rs.getDouble("subtotal_layanan"));
-        transaksi.setDiskon(rs.getString("diskon"));
-        transaksi.setTotalPembayaran(rs.getDouble("total_pembayaran"));
-        transaksi.setMetodePembayaran(rs.getString("metode_pembayaran"));
-        transaksi.setStatusPembayaran(rs.getString("status_pembayaran"));
-        transaksi.setCreatedAt(rs.getTimestamp("created_at"));
-        transaksi.setUpdatedAt(rs.getTimestamp("updated_at"));
-        return transaksi;
-    }
-    
-    /**
-     * Generate Kode Transaksi (TRX-YYYYMMDD-XXX)
-     */
-    public String generateNoTransaksi() {
-        String kodeTransaksi = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        String today = dateFormat.format(new java.util.Date());
+
+    public String generateKodeTransaksi() {
+        String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
         String prefix = "TRX-" + today + "-";
         
         String sql = "SELECT kode_transaksi FROM transaksi_layanan " +
@@ -251,50 +220,261 @@ public class TransaksiLayananDAO {
                      "ORDER BY kode_transaksi DESC LIMIT 1";
         
         try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, prefix + "%");
-            ResultSet rs = pstmt.executeQuery();
+            ps.setString(1, prefix + "%");
+            ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
-                String lastNo = rs.getString("kode_transaksi");
-                String lastSeq = lastNo.substring(lastNo.lastIndexOf("-") + 1);
-                int nextSeq = Integer.parseInt(lastSeq) + 1;
-                kodeTransaksi = prefix + String.format("%03d", nextSeq);
+                String lastKode = rs.getString("kode_transaksi");
+                String lastNumber = lastKode.substring(lastKode.length() - 3);
+                int nextNumber = Integer.parseInt(lastNumber) + 1;
+                return prefix + String.format("%03d", nextNumber);
             } else {
-                kodeTransaksi = prefix + "001";
+                return prefix + "001";
             }
             
         } catch (SQLException e) {
-            System.err.println("Error generating kode transaksi: " + e.getMessage());
+            System.err.println("Error generateKode: " + e.getMessage());
             e.printStackTrace();
-            kodeTransaksi = prefix + "001";
+            return prefix + "001";
         }
-        
-        return kodeTransaksi;
     }
-    
-    /**
-     * Check if Kode Transaksi exists
-     */
-    public boolean isNoTransaksiExists(String kodeTransaksi) {
-        String sql = "SELECT COUNT(*) FROM transaksi_layanan WHERE kode_transaksi = ?";
+
+    public List<TransaksiLayanan> getByDateRange(Date startDate, Date endDate) {
+        List<TransaksiLayanan> list = new ArrayList<>();
+        String sql = "SELECT * FROM transaksi_layanan " +
+                     "WHERE tanggal_transaksi BETWEEN ? AND ? " +
+                     "ORDER BY tanggal_transaksi DESC";
         
         try (Connection conn = koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, kodeTransaksi);
-            ResultSet rs = pstmt.executeQuery();
+            ps.setDate(1, new java.sql.Date(startDate.getTime()));
+            ps.setDate(2, new java.sql.Date(endDate.getTime()));
             
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TransaksiLayanan t = extractFromResultSet(rs);
+                list.add(t);
             }
             
         } catch (SQLException e) {
-            System.err.println("Error checking kode transaksi: " + e.getMessage());
+            System.err.println("Error getByDateRange: " + e.getMessage());
             e.printStackTrace();
         }
         
-        return false;
+        return list;
     }
+
+    public List<TransaksiLayanan> getByPelanggan(String kodePelanggan) {
+        List<TransaksiLayanan> list = new ArrayList<>();
+        String sql = "SELECT * FROM transaksi_layanan " +
+                     "WHERE kode_pelanggan = ? " +
+                     "ORDER BY tanggal_transaksi DESC";
+        
+        try (Connection conn = koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, kodePelanggan);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TransaksiLayanan t = extractFromResultSet(rs);
+                list.add(t);
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getByPelanggan: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+
+    public List<TransaksiLayanan> getByStatus(String status) {
+        List<TransaksiLayanan> list = new ArrayList<>();
+        String sql = "SELECT * FROM transaksi_layanan " +
+                     "WHERE status_pembayaran = ? " +
+                     "ORDER BY tanggal_transaksi DESC";
+        
+        try (Connection conn = koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                TransaksiLayanan t = extractFromResultSet(rs);
+                list.add(t);
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getByStatus: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return list;
+    }
+
+    public double getTotalPendapatan() {
+        String sql = "SELECT SUM(total_pembayaran) as total FROM transaksi_layanan " +
+                     "WHERE status_pembayaran = 'Lunas'";
+        
+        try (Connection conn = koneksi.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getTotalPendapatan: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return 0;
+    }
+
+    private TransaksiLayanan extractFromResultSet(ResultSet rs) throws SQLException {
+        TransaksiLayanan t = new TransaksiLayanan();
+        t.setKodeTransaksi(rs.getString("kode_transaksi"));
+        t.setKodePelanggan(rs.getString("kode_pelanggan"));
+        t.setNamaLengkap(rs.getString("nama_lengkap"));
+        t.setNoTelepon(rs.getString("no_telepon"));
+        t.setKodeKaryawan(rs.getString("kode_karyawan"));
+        t.setNamaKaryawan(rs.getString("nama_karyawan"));
+        t.setTanggalTransaksi(rs.getDate("tanggal_transaksi"));
+        t.setKodeLayanan(rs.getString("kode_layanan"));
+        t.setNamaLayanan(rs.getString("nama_layanan"));
+        t.setHargaLayanan(rs.getDouble("harga_layanan"));
+        t.setSubtotalLayanan(rs.getDouble("subtotal_layanan"));
+        t.setDiskon(rs.getString("diskon"));
+        t.setTotalPembayaran(rs.getDouble("total_pembayaran"));
+        t.setMetodePembayaran(rs.getString("metode_pembayaran"));
+        t.setStatusPembayaran(rs.getString("status_pembayaran"));
+        t.setCatatanKhusus(rs.getString("catatan_khusus"));
+        t.setCreatedAt(rs.getTimestamp("created_at"));
+        t.setUpdatedAt(rs.getTimestamp("updated_at"));
+        
+        return t;
+    }
+    
+    public String getKodePelangganByNama(String namaPelanggan) {
+        if (namaPelanggan == null) {
+            System.out.println("namaPelanggan NULL di getKodePelangganByNama");
+            return null;
+        }
+
+        String sql = "SELECT kode_pelanggan FROM master_pelanggan WHERE nama_lengkap = ? LIMIT 1";
+
+        System.out.println("getKodePelangganByNama() called: '" + namaPelanggan + "'");
+
+        try (Connection conn = koneksi.getConnection()) {
+
+            if (conn == null) {
+                System.err.println("Connection is NULL di getKodePelangganByNama");
+                return null;
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setString(1, namaPelanggan);
+                System.out.println("Executing query with nama_lengkap = " + namaPelanggan);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String kode = rs.getString("kode_pelanggan");
+                        System.out.println("FOUND kode_pelanggan: " + kode);
+                        return kode;
+                    } else {
+                        System.out.println("Pelanggan tidak ditemukan di DB: " + namaPelanggan);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error getKodePelangganByNama: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String getKodeKaryawanByNama(String namaKaryawan) {
+        String sql = "SELECT kode_karyawan FROM master_karyawan WHERE nama_lengkap = ? LIMIT 1";
+        
+        System.out.println("getKodeKaryawanByNama() called: '" + namaKaryawan + "'");
+        
+        try (Connection conn = koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            if (conn == null) {
+                System.err.println("Connection is NULL!");
+                return null;
+            }
+            
+            ps.setString(1, namaKaryawan);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                String kode = rs.getString("kode_karyawan");
+                System.out.println("FOUND kode_karyawan: " + kode);
+                return kode;
+            } else {
+                System.out.println("Karyawan tidak ditemukan: " + namaKaryawan);
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error getKodeKaryawanByNama: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    public boolean deleteTransaksi(String kodeTransaksi) {
+        return delete(kodeTransaksi);
+    }
+
+    public TransaksiLayanan getTransaksiByNo(String kodeTransaksi) {
+        return getByKode(kodeTransaksi);
+    }
+
+    public List<TransaksiLayanan> searchTransaksi(String keyword) {
+        return search(keyword);
+    }
+
+    public boolean updateTransaksi(TransaksiLayanan transaksi) {
+        return update(transaksi);
+    }
+
+    public String generateNoTransaksi() {
+        return generateKodeTransaksi();
+    }
+
+    public List<TransaksiLayanan> getAllTransaksi() {
+        return getAll();
+    }
+    
+    public String getDiskonMemberByNama(String namaPelanggan) {
+    String sql = "SELECT discount_member FROM master_pelanggan WHERE nama_lengkap = ? LIMIT 1";
+
+    try (Connection conn = koneksi.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, namaPelanggan);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("discount_member");
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Error getDiskonMemberByNama: " + e.getMessage());
+        e.printStackTrace();
+    }
+    return "0%";
+  }
 }

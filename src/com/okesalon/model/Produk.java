@@ -1,35 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 import java.util.Date;
-/**
- *
- * @author T480
- */
+
 public class Produk {
-    private String kodeProduk;          // Primary Key (auto-generate: PRD-001)
+    private String kodeProduk;
     private String namaProduk;
-    private String kategoriProduk;      // "Hair Care", "Hair Coloring", "Nail Care", "Skin Care"
-    private String jenis;               // "Dijual", "Layanan", "Dijual & Layanan"
+    private String kategoriProduk;
+    private String jenis;
     private String namaSupplier;
     private String teleponSupplier;
     private double hargaBeli;
     private double hargaJual;
     private int stokSaatIni;
     private int stokMinimum;
-    private String satuan;              // "Botol", "Tube", "Sachet", "Box"
+    private String satuan;
     private Date tanggalExpired;
-    private String status;              // "Aktif", "Non-Aktif"
+    private String status;
     private String deskripsi;
-    private String fotoProduk;          // Path file foto
-    
-    // Constructor kosong
+    private String fotoProduk;
+
     public Produk() {}
-    
-    // Constructor lengkap
+
     public Produk(String kodeProduk, String namaProduk, String kategoriProduk, 
                   String jenis, String namaSupplier, String teleponSupplier, 
                   double hargaBeli, double hargaJual, int stokSaatIni, 
@@ -52,7 +42,6 @@ public class Produk {
         this.fotoProduk = fotoProduk;
     }
     
-    // Getter & Setter
     public String getKodeProduk() { return kodeProduk; }
     public void setKodeProduk(String kodeProduk) { this.kodeProduk = kodeProduk; }
     
@@ -98,17 +87,14 @@ public class Produk {
     public String getFotoProduk() { return fotoProduk; }
     public void setFotoProduk(String fotoProduk) { this.fotoProduk = fotoProduk; }
     
-    // Helper method: Cek apakah stok hampir habis
     public boolean isStokMenipis() {
         return stokSaatIni <= stokMinimum;
     }
     
-    // Helper method: Hitung margin keuntungan
     public double getMargin() {
         return hargaJual - hargaBeli;
     }
     
-    // Helper method: Hitung persentase margin
     public double getPersentaseMargin() {
         if (hargaBeli == 0) return 0;
         return ((hargaJual - hargaBeli) / hargaBeli) * 100;

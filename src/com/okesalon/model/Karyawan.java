@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 import java.util.Date;
-/**
- *
- * @author T480
- */
+
 public class Karyawan {
-   private String kodeKaryawan;          // Primary key (auto-generate: KRY-001)
-    private String nik;                   // Field biasa, input manual
+   private String kodeKaryawan;         
+    private String nik;               
     private String namaLengkap;
     private String jabatan;
     private String spesialisasi;
@@ -19,15 +11,13 @@ public class Karyawan {
     private String email;
     private String alamatLengkap;
     private Date tanggalBergabung;
-    private String statusKepegawaian;     // "Aktif" atau "Resign"
+    private String statusKepegawaian;   
     private double gajiPokok;
     private double komisi;
-    private String fotoKaryawan;          // Path file foto (nullable)
+    private String fotoKaryawan;          
     
-    // Constructor kosong
     public Karyawan() {}
     
-    // Constructor lengkap
     public Karyawan(String kodeKaryawan, String nik, String namaLengkap, 
                     String jabatan, String spesialisasi, String noTelpon, 
                     String email, String alamatLengkap, Date tanggalBergabung, 
@@ -48,7 +38,6 @@ public class Karyawan {
         this.fotoKaryawan = fotoKaryawan;
     }
     
-    // Getter & Setter
     public String getKodeKaryawan() { return kodeKaryawan; }
     public void setKodeKaryawan(String kodeKaryawan) { this.kodeKaryawan = kodeKaryawan; }
     

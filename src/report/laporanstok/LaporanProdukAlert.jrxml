@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c5e13411-bf67-4898-b1fa-d7edee8b1493">
+	<property name="ireport.zoom" value="1.6105100000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="14"/>
+	<parameter name="p_kategori" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Semua Kategori"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_alert_level" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Semua"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_supplier" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Semua Supplier"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_urut" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Kritis → Aman"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="namaUser" class="java.lang.String"/>
+	<parameter name="roleUser" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+  p.kode_produk,
+  p.nama_produk,
+  p.kategori_produk,
+  p.stok_saat_ini,
+  p.stok_minimum,
+  CASE 
+    WHEN p.stok_saat_ini = 0 THEN 'Habis'
+    WHEN p.stok_saat_ini < p.stok_minimum THEN 'Kritis'
+    WHEN p.stok_saat_ini = p.stok_minimum THEN 'Warning'
+    ELSE 'Aman'
+  END as status,
+  GREATEST(0, p.stok_minimum - p.stok_saat_ini) as jumlah_restock,
+  COALESCE(p.nama_supplier, '-') as nama_supplier,
+  COALESCE(p.telepon_supplier, '-') as telepon_supplier
+FROM master_produk p
+WHERE p.status = 'Aktif'
+  AND (
+    $P{p_kategori} = 'Semua Kategori' 
+    OR p.kategori_produk = $P{p_kategori}
+  )
+  AND (
+    $P{p_alert_level} = 'Semua'
+    OR (
+      $P{p_alert_level} = 'Kritis' 
+      AND (p.stok_saat_ini = 0 OR p.stok_saat_ini < p.stok_minimum)
+    )
+    OR (
+      $P{p_alert_level} = 'Warning' 
+      AND p.stok_saat_ini = p.stok_minimum
+    )
+    OR (
+      $P{p_alert_level} = 'Aman' 
+      AND p.stok_saat_ini > p.stok_minimum
+    )
+  )
+  AND (
+    $P{p_supplier} = 'Semua Supplier' 
+    OR p.nama_supplier = $P{p_supplier}
+  )
+ORDER BY 
+  CASE $P{p_urut}
+    WHEN 'Kritis → Aman' THEN 
+      CASE 
+        WHEN p.stok_saat_ini = 0 THEN 1
+        WHEN p.stok_saat_ini < p.stok_minimum THEN 2
+        WHEN p.stok_saat_ini = p.stok_minimum THEN 3
+        ELSE 4 
+      END
+    WHEN 'Nama' THEN 0
+    WHEN 'Stok' THEN p.stok_saat_ini
+  END ASC,
+  p.nama_produk ASC]]>
+	</queryString>
+	<field name="kode_produk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_produk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="kategori_produk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stok_saat_ini" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stok_minimum" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah_restock" class="java.lang.Long"/>
+	<field name="nama_supplier" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telepon_supplier" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="count_kritis" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{status}.equals("Habis") || $F{status}.equals("Kritis") ? 1 : 0]]></variableExpression>
+	</variable>
+	<variable name="count_warning" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{status}.equals("Warning") ? 1 : 0]]></variableExpression>
+	</variable>
+	<variable name="count_aman" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{status}.equals("Aman") ? 1 : 0]]></variableExpression>
+	</variable>
+	<variable name="total_produk" class="java.lang.Integer" calculation="Count"/>
+	<variable name="v_nomor" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[new java.lang.Integer(1)]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="115" y="15" width="334" height="38" uuid="a22a97be-7079-4e3c-80a2-7126fb429b1b"/>
+				<textElement>
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN PRODUK ALERT]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="89" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="905c0fbf-224d-4e0b-a75c-ec6d6a1f7e28"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Kategori          :  " + $P{p_kategori}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$P{p_alert_level}.equals(&quot;Kritis&quot;) ? new Color(255,0,0) :   $P{p_alert_level}.equals(&quot;Warning&quot;) ? new Color(255,255,0) :   $P{p_alert_level}.equals(&quot;Aman&quot;) ? new Color(0,255,0) : Color.BLACK">
+				<reportElement x="0" y="20" width="555" height="20" uuid="d7ab9d9c-d000-4fb7-bc3b-ba049248172e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Alert                :  " + $P{p_alert_level}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$P{p_alert_level}.equals(&quot;Kritis&quot;) ? new Color(255,0,0) :   $P{p_alert_level}.equals(&quot;Warning&quot;) ? new Color(255,255,0) :   $P{p_alert_level}.equals(&quot;Aman&quot;) ? new Color(0,255,0) : Color.BLACK">
+				<reportElement x="0" y="40" width="555" height="20" uuid="5212ee3f-119b-43ba-955b-e1dc6171d8ef"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Supplier          :  " + $P{p_supplier}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$P{p_alert_level}.equals(&quot;Kritis&quot;) ? new Color(255,0,0) :   $P{p_alert_level}.equals(&quot;Warning&quot;) ? new Color(255,255,0) :   $P{p_alert_level}.equals(&quot;Aman&quot;) ? new Color(0,255,0) : Color.BLACK">
+				<reportElement x="0" y="60" width="555" height="20" uuid="e3be7c78-212f-4095-b47f-45eaa405c47c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Urut Berdasar :  " + $P{p_urut}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="27" y="0" width="79" height="20" uuid="23bec31b-f4c4-4466-a56c-2f885cf315b5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Produk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="0" width="79" height="20" uuid="882c2bba-b0dd-498f-bfb0-f0d14828156c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kategori]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="0" width="79" height="20" uuid="99084522-00fc-446a-a872-3ba10a17c68a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Stok]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="264" y="0" width="79" height="20" uuid="319e9b50-f3ef-42eb-986f-59f68f22273e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Minimal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="343" y="0" width="68" height="20" uuid="0ad5fce3-291f-4b55-aaef-3397d2ab51fa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="0" width="63" height="20" uuid="0cfa7cac-aad9-4566-82d2-4cae39a47083"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Restock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="0" width="79" height="20" uuid="6dc572c5-f4b6-4415-92c1-46b1c2aa19b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Supplier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="27" height="20" uuid="4f221942-1cde-4a4b-b7af-e3c5335d54a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="27" y="0" width="79" height="20" uuid="659a663d-68d2-4031-b002-1be7975413b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama_produk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="0" width="79" height="20" uuid="2ee8335a-4674-468e-ab03-541810faf82d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kategori_produk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="185" y="0" width="79" height="20" uuid="4dadd5db-be78-4b92-a0ab-93ee1b5d65c4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stok_saat_ini}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="264" y="0" width="79" height="20" uuid="65a05c20-e834-404d-b6ab-828e1a73c6bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{stok_minimum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="343" y="0" width="68" height="20" uuid="077ee5fc-f1d1-4530-bf35-275cfa141569"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="411" y="0" width="63" height="20" uuid="9a182f77-1509-4819-aa27-4822ce567294"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlah_restock}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="0" width="79" height="20" uuid="4e090138-cd2e-4943-9293-e7ec19e8e35b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama_supplier}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="27" height="20" uuid="c4ed5c3c-d5f8-4693-a9b3-7363157e33fb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{v_nomor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="152" splitType="Stretch">
+			<textField>
+				<reportElement x="398" y="93" width="148" height="20" uuid="29037fd1-a9bf-40d2-a6ce-5f7e86a11c2c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaUser}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="18" width="196" height="20" uuid="432bd850-1902-4176-8122-194a80bcf75d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bekasi, " + new java.text.SimpleDateFormat("EEEE dd MMMM yyyy", new java.util.Locale("id")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="117" width="108" height="20" uuid="353d10f4-0d74-4813-ba43-fa4c08db6ccc"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roleUser}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="128" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="140" height="20" uuid="332e2909-e5e2-4f26-9dfa-265f78573660"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Summary Alert Level : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="140" height="20" uuid="228cf35f-de88-4af1-b967-679a3c68d3b5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[● Habis/Kritis         :  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="140" height="20" uuid="d370c035-377f-425b-a311-6730df1c2598"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[● Warning               :  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="70" width="140" height="20" uuid="9c4f600c-34a1-464c-91ea-db67a1a3b5d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[● Aman                    :  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="107" width="140" height="20" uuid="7b3057b6-32a6-47c6-a53a-505e88306902"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Produk            :  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="150" y="30" width="233" height="20" uuid="8c7678a9-1053-4c9f-93ad-ef86e07b53ab"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{count_kritis} + "  produk"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="50" width="233" height="20" uuid="fccc25d1-dfce-472a-a5d7-8b165f2fa4a7"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{count_warning} + "  produk"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="70" width="233" height="20" uuid="e3f6bf9a-2912-4e9c-8984-ec6c0c5f5aa4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{count_aman} + "  produk"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="150" y="107" width="233" height="20" uuid="2afb58f5-b385-4d42-9fad-54fd8cc64f26"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT} + "  produk"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

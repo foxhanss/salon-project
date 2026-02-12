@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ca75743e-cd89-40f3-9668-4a6c9ecf334b">
+	<property name="ireport.zoom" value="1.7715610000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="p_tgl_mulai" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_tgl_sampai" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_jenis" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="namaUser" class="java.lang.String"/>
+	<parameter name="roleUser" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *
+FROM (
+    SELECT
+        t.tanggal_transaksi              AS tanggal,
+        'Layanan'                        AS jenis_transaksi,
+        t.kode_transaksi                 AS kode_transaksi,
+        t.nama_layanan                   AS deskripsi,
+        1                                AS qty,
+        t.harga_layanan                  AS harga_satuan,
+        t.total_pembayaran               AS total,
+        t.nama_lengkap                   AS pihak,
+        t.metode_pembayaran              AS metode_pembayaran
+    FROM transaksi_layanan t
+    WHERE t.tanggal_transaksi BETWEEN $P{p_tgl_mulai} AND $P{p_tgl_sampai}
+      AND ( $P{p_jenis} = 'Semua' OR $P{p_jenis} = 'Layanan' )
+      AND t.status_pembayaran = 'Lunas'
+
+    UNION ALL
+
+    SELECT
+        t.tanggal_transaksi              AS tanggal,
+        'Penjualan Produk'               AS jenis_transaksi,
+        t.kode_transaksi                 AS kode_transaksi,
+        t.nama_produk                    AS deskripsi,
+        t.jumlah_jual                    AS qty,
+        t.harga_satuan                   AS harga_satuan,
+        t.total_harga                    AS total,
+        t.nama_pelanggan                 AS pihak,
+        t.metode_pembayaran              AS metode_pembayaran
+    FROM transaksi_penjualan_produk t
+    WHERE t.tanggal_transaksi BETWEEN $P{p_tgl_mulai} AND $P{p_tgl_sampai}
+      AND ( $P{p_jenis} = 'Semua' OR $P{p_jenis} = 'Produk' )
+
+    UNION ALL
+
+    SELECT
+        t.tanggal_transaksi              AS tanggal,
+        'Pembelian Produk'               AS jenis_transaksi,
+        t.kode_transaksi                 AS kode_transaksi,
+        t.nama_produk                    AS deskripsi,
+        t.jumlah_beli                    AS qty,
+        t.harga_satuan                   AS harga_satuan,
+        t.total_harga                    AS total,
+        t.nama_supplier                  AS pihak,
+        t.metode_pembayaran              AS metode_pembayaran
+    FROM transaksi_pembelian_produk t
+    WHERE t.tanggal_transaksi BETWEEN $P{p_tgl_mulai} AND $P{p_tgl_sampai}
+      AND ( $P{p_jenis} = 'Semua' OR $P{p_jenis} = 'Produk' )
+) x
+ORDER BY tanggal, jenis_transaksi, kode_transaksi;]]>
+	</queryString>
+	<field name="tanggal" class="java.sql.Date"/>
+	<field name="jenis_transaksi" class="java.lang.String"/>
+	<field name="kode_transaksi" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="deskripsi" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Integer"/>
+	<field name="harga_satuan" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="pihak" class="java.lang.String"/>
+	<field name="metode_pembayaran" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="totalPendapatan" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.math.BigDecimal(0)]]></initialValueExpression>
+	</variable>
+	<variable name="totalItem" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{qty}]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="125" y="17" width="306" height="38" uuid="0eb20d28-93ac-40db-8b8e-78ef24d17882"/>
+				<textElement>
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN PENDAPATAN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" x="68" y="0" width="115" height="20" uuid="5ebc29a4-e373-4ecb-b358-a0d8f36dfc19"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_tgl_mulai}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="225" y="0" width="114" height="20" uuid="65435032-d846-4ec5-a198-b68d40aedf99"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_tgl_sampai}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="191" y="0" width="23" height="20" uuid="c1f6d492-bbf3-4828-a318-dc21fc3042ad"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<text><![CDATA[s/d]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="68" height="20" uuid="a3976f38-98f7-4604-8226-19ace204d59c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Periode :]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="7ceb14ff-3a9a-48e8-9119-543330698315"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="61" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="e01ea58f-99fe-4fc8-a2ca-8b5d28f9c8a5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jenis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="122" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="7e2ac0ef-cbed-4d0e-b11b-1e9ce7186de8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="183" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="f1593a3a-a044-473c-8a50-3ea6b31fdb16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Deskripsi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="244" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="023da660-0e61-4db3-b5e4-cde54a08d2c2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="305" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="44a336df-d9b8-4ce9-9a4d-3f8a718c71fb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="366" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="b5417dff-c653-4eb3-b1c3-87fa093dd064"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="427" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="9c45000b-0359-403b-8626-99722febfec9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pihak]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Transparent" x="488" y="0" width="67" height="20" backcolor="#FFFFFF" uuid="a0b91cc4-3cc6-402d-b583-a871ad0f4769"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Metode]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="ef3a7d99-ef0e-4996-9294-77b82064cb28"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tanggal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="61" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="2ae7331d-e21f-4aa4-8108-8844c2c881a0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jenis_transaksi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="122" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="efa83557-1021-40d2-9039-40c05cafcee3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kode_transaksi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="183" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="8b0c7ba3-9fa5-480e-8cf2-deef77ddaed5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deskripsi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="244" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="98cfa312-f7e2-4dab-93a7-4f0192b42d94"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="305" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="e9322043-851c-4aec-87f4-d89242b51043"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{harga_satuan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="366" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="90ffc340-72b2-49b7-90c3-6ae10f706401"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="427" y="0" width="61" height="20" backcolor="#FFFFFF" uuid="7dc28f4c-624c-4f27-ac57-b439bcec4cb1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pihak}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Transparent" x="488" y="0" width="67" height="20" backcolor="#FFFFFF" uuid="eed5defd-0444-4ea0-b5be-8dd1ac3004d5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{metode_pembayaran}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="159" splitType="Stretch">
+			<textField>
+				<reportElement x="432" y="109" width="108" height="20" uuid="f258dabc-4c91-4831-b108-a0b430f48f21"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roleUser}
+]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="10" width="196" height="20" uuid="40af3018-9158-40f6-9ec9-5a2a43114dbb"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bekasi, " + new java.text.SimpleDateFormat("EEEE dd MMMM yyyy", new java.util.Locale("id")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="398" y="85" width="148" height="20" uuid="de27dd4e-14a4-48e9-916d-fc05f163d6d6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaUser}
+]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="138" height="20" uuid="94bce2f2-3334-438f-8ce3-0fde941331cf"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Transaksi      :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="30" width="138" height="20" uuid="ac841bcb-d32f-4dca-b74b-53d373812fb0"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Item              :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="138" height="20" uuid="2d9a12cb-37c9-4f32-ba29-780eafe04413"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pendapatan  :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="138" y="30" width="201" height="20" uuid="7aeabc7d-c8f3-45e6-b122-44c2bfa1d9bd"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rp " + new java.text.DecimalFormat("#,##0").format($V{totalPendapatan})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="50" width="201" height="20" uuid="9c3f548d-a809-4f3c-9728-1ffd687efc14"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalItem} + "Item"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="138" y="10" width="201" height="20" uuid="ee483838-f29f-4d7d-876b-98836fe26f59"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,28 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.dao;
-import koneksi.koneksi;
+import com.okesalon.util.koneksi;
 import com.okesalon.model.Produk;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author T480
- */
+
 public class ProdukDAO {
     private Connection connection;
     
     public ProdukDAO() {
         this.connection = koneksi.getConnection();
     }
-    
-    /**
-     * 1. CREATE - Tambah produk baru
-     */
+
     public boolean insert(Produk produk) {
         String sql = "INSERT INTO master_produk " +
                      "(kode_produk, nama_produk, kategori_produk, jenis, " +
@@ -57,15 +46,12 @@ public class ProdukDAO {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error insert produk: " + e.getMessage());
+            System.err.println("Error insert produk: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
     
-    /**
-     * 2. READ - Ambil semua data produk
-     */
     public List<Produk> getAll() {
         List<Produk> list = new ArrayList<>();
         String sql = "SELECT * FROM master_produk ORDER BY kode_produk ASC";
@@ -79,16 +65,13 @@ public class ProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getAll produk: " + e.getMessage());
+            System.err.println("Error getAll produk: " + e.getMessage());
             e.printStackTrace();
         }
         
         return list;
     }
     
-    /**
-     * 3. READ - Ambil produk berdasarkan kode
-     */
     public Produk getByKode(String kodeProduk) {
         String sql = "SELECT * FROM master_produk WHERE kode_produk = ?";
         
@@ -101,16 +84,13 @@ public class ProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getByKode: " + e.getMessage());
+            System.err.println("Error getByKode: " + e.getMessage());
             e.printStackTrace();
         }
         
         return null;
     }
     
-    /**
-     * 4. UPDATE - Ubah data produk
-     */
     public boolean update(Produk produk) {
         String sql = "UPDATE master_produk SET " +
                      "nama_produk = ?, kategori_produk = ?, jenis = ?, " +
@@ -146,15 +126,12 @@ public class ProdukDAO {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error update produk: " + e.getMessage());
+            System.err.println("Error update produk: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
     
-    /**
-     * 5. DELETE - Hapus data produk
-     */
     public boolean delete(String kodeProduk) {
         String sql = "DELETE FROM master_produk WHERE kode_produk = ?";
         
@@ -163,15 +140,12 @@ public class ProdukDAO {
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error delete produk: " + e.getMessage());
+            System.err.println("Error delete produk: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
     
-    /**
-     * 6. SEARCH - Cari produk berdasarkan keyword
-     */
     public List<Produk> search(String keyword) {
         List<Produk> list = new ArrayList<>();
         String sql = "SELECT * FROM master_produk " +
@@ -194,16 +168,13 @@ public class ProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error search produk: " + e.getMessage());
+            System.err.println("Error search produk: " + e.getMessage());
             e.printStackTrace();
         }
         
         return list;
     }
     
-    /**
-     * 7. GENERATE KODE - Generate kode produk berikutnya
-     */
     public String generateKodeProduk() {
         String sql = "SELECT kode_produk FROM master_produk " +
                      "ORDER BY kode_produk DESC LIMIT 1";
@@ -212,24 +183,21 @@ public class ProdukDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             
             if (rs.next()) {
-                String lastKode = rs.getString("kode_produk"); // PRD-005
+                String lastKode = rs.getString("kode_produk");
                 int lastNumber = Integer.parseInt(lastKode.substring(4));
                 int nextNumber = lastNumber + 1;
-                return String.format("PRD-%03d", nextNumber); // PRD-006
+                return String.format("PRD-%03d", nextNumber);
             } else {
                 return "PRD-001";
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error generate kode: " + e.getMessage());
+            System.err.println("Error generate kode: " + e.getMessage());
             e.printStackTrace();
             return "PRD-001";
         }
     }
     
-    /**
-     * 8. GET PRODUK STOK MENIPIS
-     */
     public List<Produk> getProdukStokMenipis() {
         List<Produk> list = new ArrayList<>();
         String sql = "SELECT * FROM master_produk " +
@@ -246,42 +214,32 @@ public class ProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error get stok menipis: " + e.getMessage());
+            System.err.println("Error get stok menipis: " + e.getMessage());
             e.printStackTrace();
         }
         
         return list;
     }
     
-    /**
-     * 9. UPDATE STOK - Kurangi/tambah stok produk
-     */
     public boolean updateStok(String kodeProduk, int jumlah) {
         String sql = "UPDATE master_produk SET stok_saat_ini = stok_saat_ini + ? " +
                      "WHERE kode_produk = ?";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, jumlah);  // Positif untuk tambah, negatif untuk kurang
+            ps.setInt(1, jumlah);
             ps.setString(2, kodeProduk);
             
             return ps.executeUpdate() > 0;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error update stok: " + e.getMessage());
+            System.err.println("Error update stok: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-    
-        /**
-     * Get riwayat transaksi produk (dummy data untuk sementara)
-     * Nanti akan diambil dari tabel transaksi setelah Form Transaksi dibuat
-     */
+
     public List<Object[]> getRiwayatTransaksi() {
         List<Object[]> list = new ArrayList<>();
-
-        // Query untuk join dengan tabel transaksi (jika sudah ada)
-        // Untuk sementara, return semua produk dengan total terjual = 0
         String sql = "SELECT kode_produk, nama_produk, kategori_produk, " +
                      "stok_saat_ini, satuan, harga_jual " +
                      "FROM master_produk " +
@@ -290,30 +248,24 @@ public class ProdukDAO {
 
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-
             while (rs.next()) {
                 Object[] row = new Object[6];
                 row[0] = rs.getString("kode_produk");
                 row[1] = rs.getString("nama_produk");
                 row[2] = rs.getString("kategori_produk");
-                row[3] = 0;  // Total terjual (dummy, nanti dari tabel transaksi)
+                row[3] = 0; 
                 row[4] = rs.getString("satuan");
                 row[5] = rs.getDouble("harga_jual");
 
                 list.add(row);
             }
-
         } catch (SQLException e) {
-            System.err.println("❌ Error getRiwayatTransaksi: " + e.getMessage());
+            System.err.println("Error getRiwayatTransaksi: " + e.getMessage());
             e.printStackTrace();
         }
-
         return list;
     }
-    
-    /**
-     * Helper method: Extract Produk dari ResultSet
-     */
+
     private Produk extractProdukFromResultSet(ResultSet rs) throws SQLException {
         Produk p = new Produk();
         p.setKodeProduk(rs.getString("kode_produk"));

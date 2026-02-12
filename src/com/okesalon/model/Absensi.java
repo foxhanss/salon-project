@@ -1,48 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 import java.util.Date;
-/**
- *
- * @author T480
- */
+
 public class Absensi {
-    // Primary Key
-    // Primary Key
     private int idAbsensi;
-    private String kodeAbsensi;  // ⭐ TAMBAHAN: ABS-20251204-001
-    
-    // Foreign Key
+    private String kodeAbsensi;
     private String kodeKaryawan;
-    
-    // Data Karyawan
     private String namaKaryawan;
-    
-    // Waktu Absensi
     private Date tanggalAbsensi;
     private Date jamMasuk;
     private Date jamKeluar;
     private String totalJamKerja;
-    
-    // Status & Detail
-    private String statusKehadiran;  // Hadir, Izin, Sakit, Alfa, Cuti
+    private String statusKehadiran;
     private String lokasiCheckIn;
     private String fotoSelfie;
     private String keterangan;
-    
-    // Metadata
     private Date createdAt;
     private Date updatedAt;
     
-    // ==================== CONSTRUCTORS ====================
-    
-    public Absensi() {
-    }
-    
-    // ==================== GETTERS & SETTERS ====================
+    public Absensi() {}
     
     public int getIdAbsensi() {
         return idAbsensi;
@@ -52,7 +27,6 @@ public class Absensi {
         this.idAbsensi = idAbsensi;
     }
     
-    // ⭐ GETTER & SETTER untuk kodeAbsensi
     public String getKodeAbsensi() {
         return kodeAbsensi;
     }

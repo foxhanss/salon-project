@@ -1,28 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.dao;
 import com.okesalon.model.TransaksiPembelianProduk;
-import koneksi.koneksi;
-
+import com.okesalon.util.koneksi;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.text.SimpleDateFormat;
-/**
- *
- * @author T480
- */
+
 public class TransaksiPembelianProdukDAO {
-    // ==================== CREATE ====================
-    
-    /**
-     * Insert transaksi pembelian baru dan update stok produk
-     */
+
     public boolean insertTransaksi(TransaksiPembelianProduk transaksi) {
         Connection conn = null;
         PreparedStatement pstmtTransaksi = null;
@@ -40,9 +27,8 @@ public class TransaksiPembelianProdukDAO {
         
         try {
             conn = koneksi.getConnection();
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false);
             
-            // Insert transaksi
             pstmtTransaksi = conn.prepareStatement(sqlTransaksi);
             pstmtTransaksi.setString(1, transaksi.getKodeTransaksi());
             pstmtTransaksi.setDate(2, new java.sql.Date(transaksi.getTanggalTransaksi().getTime()));
@@ -60,8 +46,7 @@ public class TransaksiPembelianProdukDAO {
             pstmtTransaksi.setDouble(14, transaksi.getTotalHarga());
             
             int rowsInserted = pstmtTransaksi.executeUpdate();
-            
-            // Update stok produk
+
             pstmtUpdateStok = conn.prepareStatement(sqlUpdateStok);
             pstmtUpdateStok.setInt(1, transaksi.getJumlahBeli());
             pstmtUpdateStok.setString(2, transaksi.getKodeProduk());
@@ -69,17 +54,17 @@ public class TransaksiPembelianProdukDAO {
             int rowsUpdated = pstmtUpdateStok.executeUpdate();
             
             if (rowsInserted > 0 && rowsUpdated > 0) {
-                conn.commit(); // Commit transaction
-                System.out.println("✅ Transaksi berhasil disimpan!");
+                conn.commit();
+                System.out.println("Transaksi berhasil disimpan!");
                 return true;
             } else {
-                conn.rollback(); // Rollback if failed
-                System.err.println("❌ Gagal menyimpan transaksi!");
+                conn.rollback();
+                System.err.println("Gagal menyimpan transaksi!");
                 return false;
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error inserting transaksi: " + e.getMessage());
+            System.err.println("Error inserting transaksi: " + e.getMessage());
             e.printStackTrace();
             try {
                 if (conn != null) conn.rollback();
@@ -100,12 +85,7 @@ public class TransaksiPembelianProdukDAO {
             }
         }
     }
-    
-    // ==================== READ ====================
-    
-    /**
-     * Get all transaksi pembelian
-     */
+
     public List<TransaksiPembelianProduk> getAllTransaksi() {
         List<TransaksiPembelianProduk> transaksiList = new ArrayList<>();
         String sql = "SELECT * FROM transaksi_pembelian_produk " +
@@ -120,19 +100,16 @@ public class TransaksiPembelianProdukDAO {
                 transaksiList.add(transaksi);
             }
             
-            System.out.println("✅ Loaded " + transaksiList.size() + " transaksi");
+            System.out.println("Loaded " + transaksiList.size() + " transaksi");
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getting all transaksi: " + e.getMessage());
+            System.err.println("Error getting all transaksi: " + e.getMessage());
             e.printStackTrace();
         }
         
         return transaksiList;
     }
-    
-    /**
-     * Get transaksi by Kode Transaksi
-     */
+
     public TransaksiPembelianProduk getTransaksiByKode(String kodeTransaksi) {
         TransaksiPembelianProduk transaksi = null;
         String sql = "SELECT * FROM transaksi_pembelian_produk WHERE kode_transaksi = ?";
@@ -145,20 +122,17 @@ public class TransaksiPembelianProdukDAO {
             
             if (rs.next()) {
                 transaksi = extractTransaksiFromResultSet(rs);
-                System.out.println("✅ Found transaksi: " + kodeTransaksi);
+                System.out.println("Found transaksi: " + kodeTransaksi);
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getting transaksi by kode: " + e.getMessage());
+            System.err.println("Error getting transaksi by kode: " + e.getMessage());
             e.printStackTrace();
         }
         
         return transaksi;
     }
-    
-    /**
-     * Search transaksi
-     */
+
     public List<TransaksiPembelianProduk> searchTransaksi(String keyword) {
         List<TransaksiPembelianProduk> transaksiList = new ArrayList<>();
         String sql = "SELECT * FROM transaksi_pembelian_produk " +
@@ -182,21 +156,16 @@ public class TransaksiPembelianProdukDAO {
                 transaksiList.add(transaksi);
             }
             
-            System.out.println("✅ Found " + transaksiList.size() + " results for: " + keyword);
+            System.out.println("Found " + transaksiList.size() + " results for: " + keyword);
             
         } catch (SQLException e) {
-            System.err.println("❌ Error searching transaksi: " + e.getMessage());
+            System.err.println("Error searching transaksi: " + e.getMessage());
             e.printStackTrace();
         }
         
         return transaksiList;
     }
     
-    // ==================== DELETE ====================
-    
-    /**
-     * Delete transaksi (WARNING: akan mengurangi stok kembali)
-     */
     public boolean deleteTransaksi(String kodeTransaksi) {
         Connection conn = null;
         PreparedStatement pstmtGetData = null;
@@ -211,7 +180,6 @@ public class TransaksiPembelianProdukDAO {
             conn = koneksi.getConnection();
             conn.setAutoCommit(false);
             
-            // Get data transaksi
             pstmtGetData = conn.prepareStatement(sqlGetData);
             pstmtGetData.setString(1, kodeTransaksi);
             ResultSet rs = pstmtGetData.executeQuery();
@@ -220,12 +188,10 @@ public class TransaksiPembelianProdukDAO {
                 String kodeProduk = rs.getString("kode_produk");
                 int jumlahBeli = rs.getInt("jumlah_beli");
                 
-                // Delete transaksi
                 pstmtDelete = conn.prepareStatement(sqlDelete);
                 pstmtDelete.setString(1, kodeTransaksi);
                 int rowsDeleted = pstmtDelete.executeUpdate();
                 
-                // Update stok (kurangi kembali)
                 pstmtUpdateStok = conn.prepareStatement(sqlUpdateStok);
                 pstmtUpdateStok.setInt(1, jumlahBeli);
                 pstmtUpdateStok.setString(2, kodeProduk);
@@ -233,7 +199,7 @@ public class TransaksiPembelianProdukDAO {
                 
                 if (rowsDeleted > 0 && rowsUpdated > 0) {
                     conn.commit();
-                    System.out.println("✅ Transaksi berhasil dihapus: " + kodeTransaksi);
+                    System.out.println("Transaksi berhasil dihapus: " + kodeTransaksi);
                     return true;
                 } else {
                     conn.rollback();
@@ -245,7 +211,7 @@ public class TransaksiPembelianProdukDAO {
             return false;
             
         } catch (SQLException e) {
-            System.err.println("❌ Error deleting transaksi: " + e.getMessage());
+            System.err.println("Error deleting transaksi: " + e.getMessage());
             e.printStackTrace();
             try {
                 if (conn != null) conn.rollback();
@@ -268,11 +234,6 @@ public class TransaksiPembelianProdukDAO {
         }
     }
     
-    // ==================== HELPER METHODS ====================
-    
-    /**
-     * Extract TransaksiPembelianProduk from ResultSet
-     */
     private TransaksiPembelianProduk extractTransaksiFromResultSet(ResultSet rs) throws SQLException {
         TransaksiPembelianProduk transaksi = new TransaksiPembelianProduk();
         transaksi.setKodeTransaksi(rs.getString("kode_transaksi"));
@@ -294,9 +255,6 @@ public class TransaksiPembelianProdukDAO {
         return transaksi;
     }
     
-    /**
-     * Generate Kode Transaksi (PB-YYYYMMDD-XXX)
-     */
     public String generateKodeTransaksi() {
         String kodeTransaksi = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -322,10 +280,10 @@ public class TransaksiPembelianProdukDAO {
                 kodeTransaksi = prefix + "001";
             }
             
-            System.out.println("✅ Generated kode: " + kodeTransaksi);
+            System.out.println("Generated kode: " + kodeTransaksi);
             
         } catch (SQLException e) {
-            System.err.println("❌ Error generating kode transaksi: " + e.getMessage());
+            System.err.println("Error generating kode transaksi: " + e.getMessage());
             e.printStackTrace();
             kodeTransaksi = prefix + "001";
         }
@@ -333,9 +291,6 @@ public class TransaksiPembelianProdukDAO {
         return kodeTransaksi;
     }
     
-    /**
-     * Get stok produk saat ini dari master_produk
-     */
     public int getStokProduk(String kodeProduk) {
         String sql = "SELECT stok_saat_ini FROM master_produk WHERE kode_produk = ?";
         
@@ -350,16 +305,13 @@ public class TransaksiPembelianProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getting stok produk: " + e.getMessage());
+            System.err.println("Error getting stok produk: " + e.getMessage());
             e.printStackTrace();
         }
         
         return 0;
     }
-    
-    /**
-     * Get data produk lengkap dari master_produk (untuk auto-fill)
-     */
+
     public Map<String, Object> getProdukData(String kodeProduk) {
         Map<String, Object> data = new HashMap<>();
         String sql = "SELECT nama_produk, harga_beli, stok_saat_ini, nama_supplier, telepon_supplier " +
@@ -378,20 +330,17 @@ public class TransaksiPembelianProdukDAO {
                 data.put("nama_supplier", rs.getString("nama_supplier"));
                 data.put("telepon_supplier", rs.getString("telepon_supplier"));
                 
-                System.out.println("✅ Loaded produk data: " + kodeProduk);
+                System.out.println("Loaded produk data: " + kodeProduk);
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getting produk data: " + e.getMessage());
+            System.err.println("Error getting produk data: " + e.getMessage());
             e.printStackTrace();
         }
         
         return data;
     }
-    
-    /**
-     * Get list nama produk untuk ComboBox
-     */
+
     public List<String> getNamaProdukList() {
         List<String> namaProdukList = new ArrayList<>();
         String sql = "SELECT nama_produk FROM master_produk WHERE status = 'Aktif' ORDER BY nama_produk";
@@ -405,16 +354,13 @@ public class TransaksiPembelianProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getting nama produk list: " + e.getMessage());
+            System.err.println("Error getting nama produk list: " + e.getMessage());
             e.printStackTrace();
         }
         
         return namaProdukList;
     }
-    
-    /**
-     * Get kode produk by nama produk
-     */
+
     public String getKodeProdukByNama(String namaProduk) {
         String sql = "SELECT kode_produk FROM master_produk WHERE nama_produk = ?";
         
@@ -429,7 +375,7 @@ public class TransaksiPembelianProdukDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error getting kode produk: " + e.getMessage());
+            System.err.println("Error getting kode produk: " + e.getMessage());
             e.printStackTrace();
         }
         
@@ -452,16 +398,13 @@ public class TransaksiPembelianProdukDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Error getting supplier list: " + e.getMessage());
+            System.err.println("Error getting supplier list: " + e.getMessage());
             e.printStackTrace();
         }
 
         return supplierList;
     }
 
-    /**
-     * Get supplier data (telepon) by nama supplier
-     */
     public Map<String, Object> getSupplierData(String namaSupplier) {
         Map<String, Object> data = new HashMap<>();
         String sql = "SELECT telepon_supplier FROM master_produk " +
@@ -478,16 +421,13 @@ public class TransaksiPembelianProdukDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Error getting supplier data: " + e.getMessage());
+            System.err.println("Error getting supplier data: " + e.getMessage());
             e.printStackTrace();
         }
 
         return data;
     }
     
-        /**
-     * Get transaksi by supplier name
-     */
     public List<TransaksiPembelianProduk> getTransaksiBySupplier(String namaSupplier) {
         List<TransaksiPembelianProduk> list = new ArrayList<>();
         String sql = "SELECT * FROM transaksi_pembelian_produk " +
@@ -520,16 +460,13 @@ public class TransaksiPembelianProdukDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
 
         return list;
     }
-    
-        /**
-     * Get supplier summary for "View Supplier" button
-     */
+
     public List<Map<String, Object>> getSupplierSummary() {
         List<Map<String, Object>> list = new ArrayList<>();
 
@@ -561,12 +498,114 @@ public class TransaksiPembelianProdukDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
 
         return list;
     }
 
+   public boolean updateTransaksi(TransaksiPembelianProduk transaksi) {
+       Connection conn = null;
+       PreparedStatement pstmtGet = null;
+       PreparedStatement pstmtUpdate = null;
+       PreparedStatement pstmtUpdateStok = null;
 
+       String sqlGet = "SELECT kode_produk, jumlah_beli FROM transaksi_pembelian_produk " +
+                       "WHERE kode_transaksi = ?";
+
+       String sqlUpdate = "UPDATE transaksi_pembelian_produk SET " +
+                          "tanggal_transaksi = ?, " +
+                          "kode_produk = ?, " +
+                          "nama_produk = ?, " +
+                          "jumlah_beli = ?, " +
+                          "harga_satuan = ?, " +
+                          "nama_supplier = ?, " +
+                          "telepon_supplier = ?, " +
+                          "metode_pembayaran = ?, " +
+                          "keterangan = ?, " +
+                          "stok_sebelum = ?, " +
+                          "jumlah_beli_copy = ?, " +
+                          "stok_sesudah = ?, " +
+                          "total_harga = ? " +
+                          "WHERE kode_transaksi = ?";
+
+       String sqlUpdateStok = "UPDATE master_produk SET stok_saat_ini = stok_saat_ini - ? + ? " +
+                              "WHERE kode_produk = ?";
+
+       try {
+           conn = koneksi.getConnection();
+           conn.setAutoCommit(false);
+
+           pstmtGet = conn.prepareStatement(sqlGet);
+           pstmtGet.setString(1, transaksi.getKodeTransaksi());
+           ResultSet rs = pstmtGet.executeQuery();
+
+           if (!rs.next()) {
+               System.err.println("Transaksi tidak ditemukan: " + transaksi.getKodeTransaksi());
+               conn.rollback();
+               return false;
+           }
+
+           String oldKodeProduk = rs.getString("kode_produk");
+           int oldJumlah = rs.getInt("jumlah_beli");
+
+           pstmtUpdate = conn.prepareStatement(sqlUpdate);
+           pstmtUpdate.setDate(1, new java.sql.Date(transaksi.getTanggalTransaksi().getTime()));
+           pstmtUpdate.setString(2, transaksi.getKodeProduk());
+           pstmtUpdate.setString(3, transaksi.getNamaProduk());
+           pstmtUpdate.setInt(4, transaksi.getJumlahBeli());
+           pstmtUpdate.setDouble(5, transaksi.getHargaSatuan());
+           pstmtUpdate.setString(6, transaksi.getNamaSupplier());
+           pstmtUpdate.setString(7, transaksi.getTeleponSupplier());
+           pstmtUpdate.setString(8, transaksi.getMetodePembayaran());
+           pstmtUpdate.setString(9, transaksi.getKeterangan());
+           pstmtUpdate.setInt(10, transaksi.getStokSebelum());
+           pstmtUpdate.setInt(11, transaksi.getJumlahBeli());
+           pstmtUpdate.setInt(12, transaksi.getStokSesudah());
+           pstmtUpdate.setDouble(13, transaksi.getTotalHarga());
+           pstmtUpdate.setString(14, transaksi.getKodeTransaksi());
+
+           int rowsUpdated = pstmtUpdate.executeUpdate();
+
+           pstmtUpdateStok = conn.prepareStatement(sqlUpdateStok);
+           pstmtUpdateStok.setInt(1, oldJumlah);
+           pstmtUpdateStok.setInt(2, transaksi.getJumlahBeli());
+           pstmtUpdateStok.setString(3, oldKodeProduk);
+
+           int rowsStokUpdated = pstmtUpdateStok.executeUpdate();
+
+           if (rowsUpdated > 0 && rowsStokUpdated > 0) {
+               conn.commit();
+               System.out.println("Transaksi berhasil diupdate!");
+               return true;
+           } else {
+               conn.rollback();
+               System.err.println("Gagal update transaksi!");
+               return false;
+           }
+
+       } catch (SQLException e) {
+           System.err.println("Error updating transaksi: " + e.getMessage());
+           e.printStackTrace();
+           try {
+               if (conn != null) conn.rollback();
+           } catch (SQLException ex) {
+               ex.printStackTrace();
+           }
+           return false;
+       } finally {
+           try {
+               if (pstmtGet != null) pstmtGet.close();
+               if (pstmtUpdate != null) pstmtUpdate.close();
+               if (pstmtUpdateStok != null) pstmtUpdateStok.close();
+               if (conn != null) {
+                   conn.setAutoCommit(true);
+                   conn.close();
+               }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+       }
+   }
 }

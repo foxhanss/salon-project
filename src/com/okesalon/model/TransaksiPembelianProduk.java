@@ -1,45 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 import java.util.Date;
-/**
- *
- * @author T480
- */
+
 public class TransaksiPembelianProduk {
-    // Primary Fields
     private String kodeTransaksi;
     private Date tanggalTransaksi;
-    
-    // Produk Fields
     private String kodeProduk;
     private String namaProduk;
     private int jumlahBeli;
     private double hargaSatuan;
-    
-    // Supplier Fields
     private String namaSupplier;
     private String teleponSupplier;
     private String metodePembayaran;
-    
-    // Additional Fields
     private String keterangan;
     private int stokSebelum;
     private int jumlahBeliCopy;
     private int stokSesudah;
     private double totalHarga;
-    
-    // Audit Fields
     private Date createdAt;
     private Date updatedAt;
-    
-    // ==================== CONSTRUCTORS ====================
-    
-    public TransaksiPembelianProduk() {
-    }
+
+    public TransaksiPembelianProduk() {}
     
     public TransaksiPembelianProduk(String kodeTransaksi, Date tanggalTransaksi, 
                                      String kodeProduk, String namaProduk,
@@ -62,8 +42,6 @@ public class TransaksiPembelianProduk {
         this.stokSesudah = stokSesudah;
         this.totalHarga = totalHarga;
     }
-    
-    // ==================== GETTERS & SETTERS ====================
     
     public String getKodeTransaksi() {
         return kodeTransaksi;
@@ -193,8 +171,6 @@ public class TransaksiPembelianProduk {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    // ==================== TO STRING ====================
     
     @Override
     public String toString() {

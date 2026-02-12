@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f870c40-61ac-43db-8c3c-15443524c0e9">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="125"/>
+	<parameter name="p_tanggal_mulai" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_tanggal_sampai" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_status_dokumen" class="java.lang.String"/>
+	<parameter name="p_urutan" class="java.lang.String"/>
+	<parameter name="p_summary_aktif" class="java.lang.String"/>
+	<parameter name="p_summary_nonaktif" class="java.lang.String"/>
+	<parameter name="p_summary_expired" class="java.lang.String"/>
+	<parameter name="p_summary_total" class="java.lang.String"/>
+	<parameter name="namaUser" class="java.lang.String"/>
+	<parameter name="roleUser" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    a.kategori_dokumen,
+    COUNT(*) as jumlah,
+    GROUP_CONCAT(DISTINCT a.status ORDER BY a.status SEPARATOR ', ') as status
+FROM arsip_dokumen a
+WHERE a.status != 'Deleted'
+  AND ($P{p_tanggal_mulai} IS NULL OR DATE(a.tanggal_dokumen) >= $P{p_tanggal_mulai})
+  AND ($P{p_tanggal_sampai} IS NULL OR DATE(a.tanggal_dokumen) <= $P{p_tanggal_sampai})
+  AND (
+      $P{p_status_dokumen} IS NULL 
+      OR $P{p_status_dokumen} = 'Semua Status' 
+      OR a.status = $P{p_status_dokumen}
+  )
+GROUP BY a.kategori_dokumen
+ORDER BY jumlah DESC, a.kategori_dokumen ASC]]>
+	</queryString>
+	<field name="kategori_dokumen" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah" class="java.lang.Long"/>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="18" width="400" height="38" uuid="b12134cc-d399-4afa-a487-27ecae68768d"/>
+				<textElement>
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN KATEGORI DOKUMEN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="68" height="20" uuid="7df8a65f-04c3-4b46-9680-f43311cf215e"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Periode :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="0" width="23" height="20" uuid="95e12d8e-6649-4ca8-a19b-77259f173b1c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[s/d]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="68" y="0" width="111" height="20" uuid="2744585d-99d1-4aca-85ba-00855d6f5df4"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_tanggal_mulai}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="0" width="100" height="20" uuid="6efb5139-091d-4dbb-8df3-191f95776b89"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_tanggal_sampai}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="130" height="20" uuid="b7ad4915-1eba-4198-8121-d0d118f7d614"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status Dokumen :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="130" height="20" uuid="4643632d-7ddd-4431-b027-a1ab4f4f634d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Urut Berdasar     :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="20" width="182" height="20" uuid="6a994ac2-b0e3-45f4-a5d2-af312c1833f7"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_status_dokumen}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="40" width="182" height="20" uuid="b8c86e8f-0430-4872-8d3a-d910388db035"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_urutan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="23" height="20" uuid="3ef1fa10-b28e-4bce-ac39-c5d961fe5a52"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="0" width="179" height="20" uuid="41922147-2764-4021-a73b-0342c848c642"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kategori Dokumen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="0" width="168" height="20" uuid="db6fdc84-3f37-46a3-a3b4-92c0462d3632"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jumlah Dokumen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="185" height="20" uuid="811e5e00-6215-41a6-bb98-dc41012990bc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status Dokumen]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="23" height="20" uuid="a362239c-ef03-4e8f-85dc-acfabac1c2e7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="23" y="0" width="179" height="20" uuid="23345802-e22f-4121-9f02-7d735bf21e8d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kategori_dokumen}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="202" y="0" width="168" height="20" uuid="99aeb6e1-7935-4556-ae33-f92ff0c6f2ae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jumlah}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="185" height="20" uuid="fb948c49-8b77-4338-a06f-8fcfee8b55ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="368" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="26" width="130" height="20" uuid="87e28bbd-ad05-44a8-9675-70c291f0c60d"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aktif                     :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="46" width="130" height="20" uuid="07814a5d-8e49-4d26-8c93-608fe71946f1"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Non-Aktif             :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="66" width="130" height="20" uuid="16d747f7-e910-483b-b8d1-0033be187dad"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Expired                :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="99" width="130" height="20" uuid="0ef0fb60-e231-4c9c-923a-a46b7e6f13ba"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Dokumen   :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="26" width="255" height="20" uuid="0fc22af5-6407-4eb2-b357-2b7c498aa952"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_aktif} + " Dokumen"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="46" width="255" height="20" uuid="77fc0e6a-fca8-471b-9c95-48b746f2df82"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_nonaktif} + " Dokumen"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="66" width="255" height="20" uuid="beb9c77d-6fa8-4bac-b814-2cbc10a32fcc"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_expired} + " Dokumen"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="99" width="255" height="20" uuid="85c5b1bd-6ddd-4282-bf07-13c5bcc4ae2a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{p_summary_total} + " Dokumen"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="398" y="269" width="148" height="20" uuid="1e8a93a2-0e2b-42fe-8763-6246d82a80e2"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{namaUser}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="293" width="108" height="20" uuid="be66cc50-2a01-4b23-b056-40fcc61ff336"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{roleUser}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="194" width="196" height="20" uuid="61cc13ad-7fcd-4640-b328-8e79837d97de"/>
+				<textElement>
+					<font fontName="Times New Roman" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bekasi, " + new java.text.SimpleDateFormat("EEEE dd MMMM yyyy", new java.util.Locale("id")).format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

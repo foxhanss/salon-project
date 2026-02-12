@@ -1,28 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.okesalon.model;
 
-/**
- *
- * @author T480
- */
 public class Layanan {
-    private String kodeLayanan;  // primary key, auto-generate
+    private String kodeLayanan;
     private String namaLayanan;
     private String kategoriLayanan;
     private double hargaLayanan;
-    private int durasiEstimasi;  // menit
+    private int durasiEstimasi;
     private String deskripsiLayanan;
-    private String status;       // "Aktif" atau "Non-Aktif"
-    private String fotoLayanan;  // path file, boleh null
+    private String status;
+    private String fotoLayanan;
 
-    // Constructor kosong
     public Layanan() {}
 
-    // Constructor lengkap
     public Layanan(String kodeLayanan, String namaLayanan, String kategoriLayanan, 
                    double hargaLayanan, int durasiEstimasi, String deskripsiLayanan, 
                    String status, String fotoLayanan) {
@@ -36,7 +25,6 @@ public class Layanan {
         this.fotoLayanan = fotoLayanan;
     }
 
-    // Getter & Setter
     public String getKodeLayanan() { return kodeLayanan; }
     public void setKodeLayanan(String kodeLayanan) { this.kodeLayanan = kodeLayanan; }
 

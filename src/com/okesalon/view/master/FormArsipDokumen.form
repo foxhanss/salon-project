@@ -331,7 +331,7 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="Judul" min="-2" pref="400" max="-2" attributes="0"/>
                               <Component id="tanggal" alignment="0" min="-2" pref="220" max="-2" attributes="0"/>
-                              <Component id="kategori" alignment="0" min="-2" pref="230" max="-2" attributes="0"/>
+                              <Component id="kategori_dokumen" alignment="0" min="-2" pref="230" max="-2" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="file_path" min="-2" pref="281" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -392,7 +392,7 @@
                                       <Component id="file_path" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="kategori" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                              <Component id="kategori_dokumen" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jScrollPane1" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
@@ -526,7 +526,7 @@
                     <Property name="text" type="java.lang.String" value="Kategori Dokumen"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="kategori">
+                <Component class="javax.swing.JComboBox" name="kategori_dokumen">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Times New Roman" size="18" style="0"/>
